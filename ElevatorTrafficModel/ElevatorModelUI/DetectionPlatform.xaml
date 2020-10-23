@@ -1,0 +1,17 @@
+﻿<Window x:Class="ElevatorModelUI.DetectionPlatform"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ElevatorModelUI"
+        mc:Ignorable="d"
+        Title="DetectionPlatform" Height="600" Width="525">
+    <Canvas Name="myCanvas" Focusable="True" KeyDown="KeyIsDown" KeyUp="KeyIsUp">
+        <Label Name="txtInfo" FontSize="16">Landed on - ??</Label>
+        <Rectangle Name="player" Fill="Blue" Width="50" Height="50" Canvas.Left="224" Canvas.Top="30" />
+        <Rectangle Name="platform1" Fill="Purple" Tag="platform" Width="300" Height="50" Canvas.Left="188" Canvas.Top="124"/>
+        <Rectangle Name="platform2" Fill="Orange" Tag="platform" Width="300" Height="50" Canvas.Left="42" Canvas.Top="294" />
+        <Rectangle Name="platform3" Fill="Aqua" Tag="platform" Width="300" Height="50" Canvas.Left="188" Canvas.Top="446" />
+
+    </Canvas>
+</Window>

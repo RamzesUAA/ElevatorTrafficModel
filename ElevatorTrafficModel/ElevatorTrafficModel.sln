@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorModelUI", "ElevatorModelUI\ElevatorModelUI.csproj", "{127835E9-07B9-429F-B33A-C79655D4B2FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorModelView", "ElevatorModelUI\ElevatorModelView.csproj", "{127835E9-07B9-429F-B33A-C79655D4B2FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorModelBL", "ElevatorModelBL\ElevatorModelBL.csproj", "{588E4F23-C15B-4952-A6B7-65DCA73EA5A7}"
 EndProject

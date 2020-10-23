@@ -9,20 +9,26 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ElevatorModelUI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CollisionDetection.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CollisionDetection : Window
     {
-        public MainWindow()
+        public CollisionDetection()
         {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
+        }
+
+        private void play_btn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

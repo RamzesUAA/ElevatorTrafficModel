@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ElevatorModelUI.Properties
+namespace ElevatorModelView.Properties
 {
 
 
