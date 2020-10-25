@@ -5,10 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElevatorModelUI"
         mc:Ignorable="d"
-        Title="WorkingSpace" Height="355" Width="525">
-    <Canvas x:Name="myCanvas" Background="LightBlue" Focusable="True" KeyDown="KeiIsDown" KeyUp="KeyIsUp">
-        <Rectangle Name="player" Height="200" Width="100" Fill="Red" Canvas.Left="266" Canvas.Top="95"></Rectangle>
-        <Rectangle Name="box" Height="50" Width="50" Fill="Purple" Canvas.Left="174" Canvas.Top="244"></Rectangle>
+        Title="WorkingSpace" Height="720" Width="1280">
 
-    </Canvas>
+    <Grid x:Name="myCanvas" Background="LightBlue" Focusable="True" KeyDown="KeiIsDown" KeyUp="KeyIsUp">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+      
+        <Canvas x:Name="control" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Width="auto" Height="auto">
+            <Button x:Name="btn_addFloor" Width="auto"  Content="Add floor" Click="btn_addFloor_Click" HorizontalAlignment="Center"/>
+            <Button x:Name="btn_addElevator" Width="auto"  Content="Add floor" Click="btn_addElevator_Click" HorizontalAlignment="Center"/>
+        </Canvas>
+        <Canvas x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto">
+            <Rectangle Name="player" Height="50" Width="25" Fill="Red" Canvas.Left="100" Canvas.Bottom="100" Canvas.Top="-152"></Rectangle>
+            <Rectangle Name="box" Height="50" Width="50" Fill="Purple"
+                       Canvas.Left="200"
+                       Canvas.Bottom="50"/>
+        </Canvas>
+
+
+    </Grid>
 </Window>

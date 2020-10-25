@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,41 @@ namespace ElevatorModelUI
             gameTimer.Start();
             playerSprite.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/elevator.png"));
             player.Fill = playerSprite;
+
+        }
+        int countOfFloors;
+        private void btn_addFloor_Click(object sender, RoutedEventArgs e)
+        {
+             countOfFloors++;
+            Rectangle floor = new Rectangle()
+            {
+                Name = $"floor" + countOfFloors,
+                Height = 5,
+                Width = 1000,
+                Fill = Brushes.White,
+                Tag = "floorItem"
+            };
+
+            var item = build.Children.OfType<Rectangle>().Last();
+
+            Canvas.SetLeft(floor, 0);
+            if(countOfFloors != 1)
+            {
+                Canvas.SetBottom(floor, Canvas.GetBottom(item) + 25);
+            }
+            else
+            {
+                Canvas.SetBottom(floor, 0);
+            }
+
+
+            build.Children.Add(floor);
+                
+            //< Rectangle Name = "player" Height = "50" Width = "25" Fill = "Red" Canvas.Left = "121" Canvas.Top = "45" ></ Rectangle >
+        }
+
+        private void btn_addElevator_Click(object sender, RoutedEventArgs e)
+        {
 
         }
 

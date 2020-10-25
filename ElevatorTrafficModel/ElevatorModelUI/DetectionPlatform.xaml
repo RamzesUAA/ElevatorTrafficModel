@@ -8,8 +8,8 @@
         Title="DetectionPlatform" Height="600" Width="525">
     <Canvas Name="myCanvas" Focusable="True" KeyDown="KeyIsDown" KeyUp="KeyIsUp">
         <Label Name="txtInfo" FontSize="16">Landed on - ??</Label>
-        <Rectangle Name="player" Fill="Blue" Width="50" Height="50" Canvas.Left="224" Canvas.Top="30" />
-        <Rectangle Name="platform1" Fill="Purple" Tag="platform" Width="300" Height="50" Canvas.Left="188" Canvas.Top="124"/>
+        <Rectangle Name="player" Fill="Blue" Width="50" Height="50" Canvas.Left="245" Canvas.Top="40" RenderTransformOrigin="0.5,0.5" />
+        <Rectangle Name="platform1" Fill="Purple" Tag="platform" Width="300" Height="50" Canvas.Left="188" Canvas.Top="125"/>
         <Rectangle Name="platform2" Fill="Orange" Tag="platform" Width="300" Height="50" Canvas.Left="42" Canvas.Top="294" />
         <Rectangle Name="platform3" Fill="Aqua" Tag="platform" Width="300" Height="50" Canvas.Left="188" Canvas.Top="446" />
 
