@@ -10,16 +10,16 @@ namespace ElevatorModelBL.Models
 {
     public class Person
     {
-        public Person(string Name, int FloorIntention, int CurrentFloor, float Weigh)
+        public Person(string Name, Floor FloorIntention, Floor CurrentFloor, float Weigh)
         {
             this.Name = Name;
             this.FloorIntention = FloorIntention;
             this.CurrentFloor = CurrentFloor;
             this.Weigh = Weigh;
         }
-        private string Name { get; set; }
-        private int FloorIntention { get; set; }
-        private int CurrentFloor { get; set; }
-        private float Weigh { get; set; }
+        public string Name { get; set; }
+        public Floor FloorIntention { get; set; }
+        public Floor CurrentFloor { get; set; }
+        public float Weigh { get; set; }
     }
 }

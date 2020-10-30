@@ -10,13 +10,11 @@ namespace ElevatorModelBL.Models
     public class Elevator
     {
         Random random = new Random();
-        public Elevator(ElevatorType type)
+        public Elevator()
         {
-            ID = random.Next(1, 321);
-            TypeOfElevator = type;
         }
-        private int ID { get; set; }
-        private ElevatorType TypeOfElevator {get;set;}
+        public int ID { get; set; }
+        public ElevatorType TypeOfElevator {get;set;}
         private List<Person> PeopleInsideElevator { get; set; }
         private int MaxWeigh() => (int)TypeOfElevator;
 
