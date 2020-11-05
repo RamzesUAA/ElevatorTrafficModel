@@ -110,7 +110,7 @@ namespace ElevatorModelUI
             building.CountOfFloors = Convert.ToInt32(textBox_FloorsCount.Text);
             for(int i = 0; i < Convert.ToInt32(textBox_ElevatorsCount.Text); ++i)
             {
-                Elevators.Add(new Elevator() { ID = i + 1 });
+                Elevators.Add(new Elevator() { ID = $"Elevator_" + (i+1)});
             }
             InitializeSecondWindowComponent();
         }

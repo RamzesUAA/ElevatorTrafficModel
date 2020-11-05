@@ -10,6 +10,10 @@ namespace ElevatorModelBL.Models
 {
     public class Person
     {
+        public Person()
+        {
+        }
+
         public Person(string Name, Floor FloorIntention, Floor CurrentFloor, float Weigh)
         {
             this.Name = Name;

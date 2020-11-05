@@ -13,7 +13,7 @@ namespace ElevatorModelBL.Models
         public Elevator()
         {
         }
-        public int ID { get; set; }
+        public string ID { get; set; }
         public ElevatorType TypeOfElevator {get;set;}
         private List<Person> PeopleInsideElevator { get; set; }
         private int MaxWeigh() => (int)TypeOfElevator;

@@ -1,83 +1,33 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace CrmBL.Model
-//{
-//    public class Generator
-//    {
-//        Random rnd = new Random();
-//        public List<Customer> Customers { get; set; } = new List<Customer>();
-//        public List<Product> Products { get; set; } = new List<Product>();
-//        public List<Seller> Sellers { get; set; } = new List<Seller>();
+namespace ElevatorModelBL.Models
+{
+    public class Generator
+    {
+        Random rnd = new Random();
+        public void GetPassangers(List<Person> people, List<Floor> floors)
+        {
+            int count = rnd.Next(35, 100);
+            for(int i=0; i < count; ++i)
+            {
+                int random = rnd.Next(0, floors.Count-1);
+                var person = new Person()
+                {
+                    Name = GetRandomText(),
+                    CurrentFloor = floors[random],
+                    Weigh = (float)rnd.NextDouble() * (115 - 35) + 35,
+                };
+                people.Add(person);
+            }
+        }
 
-//        public List<Customer> GetCustomers(int count)
-//        {
-//            var result = new List<Customer>();
-//            for (int i = 0; i < count; ++i)
-//            {
-//                var customer = new Customer()
-//                {
-//                    CustomerId = Customers.Count,
-//                    Name = GetRandomText(),
-//                };
-//                Customers.Add(customer);
-//                result.Add(customer);
-//            }
-//            return result;
-//        }
-
-//        public List<Seller> GetSellers(int count)
-//        {
-//            var result = new List<Seller>();
-//            for (int i = 0; i < count; ++i)
-//            {
-//                var seller = new Seller()
-//                {
-//                    SellerId = Sellers.Count,
-//                    Name = GetRandomText(),
-//                };
-//                Sellers.Add(seller);
-//                result.Add(seller);
-//            }
-//            return result;
-//        }
-
-//        public List<Product> GetProducts(int count)
-//        {
-//            var result = new List<Product>();
-//            for (int i = 0; i < count; ++i)
-//            {
-//                var product = new Product()
-//                {
-//                    ProductId = Products.Count,
-//                    Name = GetRandomText(),
-//                    Count = rnd.Next(10, 1000),
-//                    Price = Convert.ToDecimal(rnd.Next(5, 100000) + rnd.NextDouble())
-//                };
-//                Products.Add(product);
-//                result.Add(product);
-//            }
-//            return result;
-//        }
-//        public List<Product> GetRandomProduct(int min, int max)
-//        {
-//            var result = new List<Product>();
-
-//            var count = rnd.Next(min, max);
-//            for (int i = 0; i < count; ++i)
-//            {
-//                result.Add(Products[rnd.Next(Products.Count - 1)]);
-//            }
-//            return result;
-
-//        }
-
-//        private string GetRandomText()
-//        {
-//            return Guid.NewGuid().ToString().Substring(0, 5);
-//        }
-//    }
-//}
+        private string GetRandomText()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 5);
+        }
+    }
+}

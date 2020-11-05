@@ -13,8 +13,7 @@ namespace ElevatorModelBL.Models
 
         }
         public Floor NumberOfFloor { get; set; }
-        public Dictionary<Elevator, List<Person>>  PeopleInQueue ;
-        
+        public Dictionary<Elevator, List<Person>>  PeopleInQueue = new Dictionary<Elevator, List<Person>>();
         public int CountPeopleInQueue => PeopleInQueue.Values.Count;
     }
 }

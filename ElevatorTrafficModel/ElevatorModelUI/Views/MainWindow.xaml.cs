@@ -50,6 +50,7 @@ namespace ElevatorModelUI
 
         List<Elevator> Elevators;
         List<Person> People;
+        List<Floor> Floors;
         int FloorsCount;
 
         DispatcherTimer gameTimer = new DispatcherTimer();
@@ -59,6 +60,7 @@ namespace ElevatorModelUI
             InitializeComponent();
 
             People = new List<Person>();
+            Floors = new List<Floor>();
 
             myCanvas.Focus();
             gameTimer.Tick += gameTimerEvent;
@@ -88,8 +90,6 @@ namespace ElevatorModelUI
                     Fill = floorSprite,
                     Tag = "floorItem"
                 };
-                //MessageBox()
-
 
                 Rectangle item = build.Children.OfType<Rectangle>().Last();
                 Canvas.SetLeft(floor, 0);
@@ -103,6 +103,7 @@ namespace ElevatorModelUI
                 }
 
                 build.Children.Add(floor);
+                Floors.Add(new Floor() { ID = floor.Name });
             }
         }
 
@@ -118,21 +119,21 @@ namespace ElevatorModelUI
                 switch (Elevator.TypeOfElevator)
                 {
                     case ElevatorType.Hydraulic:
-                        elevator.Name = $"elevator" + countOfElevators;
+                        elevator.Name = Elevator.ID;
                         elevator.Height = 30;
                         elevator.Width = 20;
                         elevator.Fill = HydraulicElevator;
                         elevator.Tag = "elevatorItem";
                         break;
                     case ElevatorType.MachineRoom:
-                        elevator.Name = $"elevator" + countOfElevators;
+                        elevator.Name = Elevator.ID;
                         elevator.Height = 30;
                         elevator.Width = 20;
                         elevator.Fill = MachineRoomElevator;
                         elevator.Tag = "elevatorItem";
                         break;
                     case ElevatorType.Traction:
-                        elevator.Name = $"elevator" + countOfElevators;
+                        elevator.Name = Elevator.ID;
                         elevator.Height = 30;
                         elevator.Width = 20;
                         elevator.Fill = TractionElevator;
@@ -160,10 +161,113 @@ namespace ElevatorModelUI
            
         }
 
-
+        Generator generator = new Generator();
+        QueryController QueryController = new QueryController();
         private void btn_GeneratePassangers_Click(object sender, RoutedEventArgs e)
         {
+          
+            //generator.GetPassangers(People, Floors);
+            People.Add(new Person()
+            {
+                Name = "Roman",
+                CurrentFloor = Floors[2],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "Olga",
+                CurrentFloor = Floors[2],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "Julia",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
 
+            People.Add(new Person()
+            {
+                Name = "Ron",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+
+            People.Add(new Person()
+            {
+                Name = "Oksa",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "Jeko",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "David",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "Sofa",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+            People.Add(new Person()
+            {
+                Name = "Oleg",
+                CurrentFloor = Floors[0],
+                Weigh = 32,
+                FloorIntention = Floors[2]
+            });
+
+            foreach (var item in People)
+            {
+                QueryController.Add(item, Elevators);
+            }
+
+            int countOfPersons = 0;
+            foreach (var item in QueryController.Queries)
+            {
+                foreach(var elevator in item.PeopleInQueue)
+                {
+                    int countInQueue = 0;
+                    foreach (var personInQueue in elevator.Value)
+                    {
+                        countOfPersons++;
+                        Rectangle person = new Rectangle()
+                        {
+                            Name = personInQueue.Name,
+                            Height = 30,
+                            Width = 20,
+                            Fill = countOfPersons % 2 == 0 ? GirlSprite : BoySprite,
+                            Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor
+                        };
+
+  
+                        var currentPosition = build.Children.OfType<Rectangle>().Where(p => p.Name == personInQueue.CurrentFloor.ToString()).FirstOrDefault();
+                        var currentElevatorQueue = build.Children.OfType<Rectangle>().Where(p => p.Name == elevator.Key.ID).FirstOrDefault();
+                      
+                        Canvas.SetLeft(person, Canvas.GetLeft(currentElevatorQueue)- 25- countInQueue * 20);
+                        Canvas.SetBottom(person, Canvas.GetBottom(currentPosition) + 7);
+                        build.Children.Add(person);
+                        countInQueue++;
+
+                    }
+                }
+            }
         }
 
         private void gameTimerEvent(object sender, EventArgs e)

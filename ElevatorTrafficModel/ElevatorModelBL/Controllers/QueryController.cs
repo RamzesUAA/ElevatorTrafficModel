@@ -9,33 +9,39 @@ namespace ElevatorModelBL.Controllers
 {
     public class QueryController
     {
-        List<Query> queries = new List<Query>();
+        public List<Query> Queries = new List<Query>();
 
-
-        public void Add(Person person)
+        public KeyValuePair<Elevator,List<Person>> Add(Person person, List<Elevator> elevators)
         {
-            Query minQuery = queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
+            Query FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
           
-            if(minQuery == null)
+            if(FloorQuery == null)
             {
-
+                FloorQuery = new Query();
+                List<Person> list = new List<Person>();
+                list.Add(person);
+                FloorQuery.NumberOfFloor = person.CurrentFloor;
+                FloorQuery.PeopleInQueue.Add(elevators[0], list);
+                for(int i = 1; i < elevators.Count ;++i)
+                {
+                    FloorQuery.PeopleInQueue.Add(elevators[i], new List<Person>());
+                }
+                Queries.Add(FloorQuery);
             }
             else
             {
-                var min = minQuery.PeopleInQueue.Values.Count;
-                foreach (var item in queries.Where(p => p.NumberOfFloor == person.CurrentFloor))
+                var minFulledElevator = FloorQuery.PeopleInQueue.First();
+                foreach (var item in FloorQuery.PeopleInQueue)
                 {
-                    if (minQuery.PeopleInQueue.Count > item.CountPeopleInQueue)
+                    if (minFulledElevator.Value.Count > item.Value.Count)
                     {
-                        minQuery = item;
+                        minFulledElevator = item;
                     }
                 }
-
-               
+                minFulledElevator.Value.Add(person);
+                return minFulledElevator;
             }
-            
-            
+            return FloorQuery.PeopleInQueue.First();
         }
-
     }
 }

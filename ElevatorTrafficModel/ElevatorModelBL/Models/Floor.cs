@@ -9,5 +9,10 @@ namespace ElevatorModelBL.Models
     public class Floor
     {
         public string ID;
+
+        public override string ToString()
+        {
+            return ID;
+        }
     }
 }
