@@ -43,5 +43,11 @@ namespace ElevatorModelBL.Controllers
             }
             return FloorQuery.PeopleInQueue.First();
         }
+
+        public KeyValuePair<Elevator, List<Person>> Remove(Person person, List<Elevator> elevators)
+        {
+
+            return new KeyValuePair<Elevator, List<Person>>();
+        }
     }
 }

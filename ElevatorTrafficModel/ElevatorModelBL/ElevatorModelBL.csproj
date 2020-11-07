@@ -44,12 +44,12 @@
     <Compile Include="Controllers\ElevatorController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Enums\ElevatorsTypes.cs" />
-    <Compile Include="Models\Building.cs" />
     <Compile Include="Models\Elevator.cs" />
     <Compile Include="Models\Floor.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Query.cs" />
+    <Compile Include="Models\QueueOfRequests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

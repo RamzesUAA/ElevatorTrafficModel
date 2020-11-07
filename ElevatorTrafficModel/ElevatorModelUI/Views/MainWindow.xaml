@@ -15,7 +15,7 @@
         <Grid Background="#b27ceb">
             <Canvas x:Name="control" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Width="auto" Height="auto">
                 <Button x:Name="btn_GeneratePassangers" Width="auto"  Content="Generate passangers" Click="btn_GeneratePassangers_Click"  HorizontalAlignment="Center" Canvas.Left="220" Canvas.Top="268"/>
-                <Button x:Name="btn_RunModel" Width="164"  Content="Start model"  HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="175"/>
+                <Button x:Name="btn_RunModel" Width="164"  Content="Start model"  HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="175" Click="btn_RunModel_Click"/>
                 <Button x:Name="btn_StopModel" Width="164"  Content="Stop model" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="175"/>
                 <Button x:Name="btn_Info" Width="164"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="608"/>
                 <Button x:Name="btn_AboutUs" Width="164"  Content="About us" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="608"/>
@@ -29,7 +29,7 @@
                 <ImageBrush ImageSource="/Images/Brick2.jpg"/>
             </Grid.Background>
             <Canvas  x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto" >
-                <Rectangle Name="player" Height="50" Width="20" Fill="Red" Canvas.Left="0" Canvas.Bottom="100" Canvas.Top="-49"></Rectangle>
+                
                 <Rectangle x:Name="box" Height="35" Width="20" 
                        Canvas.Left="69"
                        Canvas.Bottom="50" Canvas.Top="-39"/>

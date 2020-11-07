@@ -47,7 +47,10 @@ namespace ElevatorModelUI
         bool goLeft, goRight, goUp, goDown;
         int playerSpeed = 4;
         int speed = 6;
-
+        int elevatorSpeed = 1;
+        Generator generator = new Generator();
+        QueryController QueryController = new QueryController();
+        ElevatorController ElevatorController = new ElevatorController();
         List<Elevator> Elevators;
         List<Person> People;
         List<Floor> Floors;
@@ -63,9 +66,8 @@ namespace ElevatorModelUI
             Floors = new List<Floor>();
 
             myCanvas.Focus();
-            gameTimer.Tick += gameTimerEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
-            gameTimer.Start();
+            //  gameTimer.Tick += gameTimerEvent;
+            
             box.Fill = BoySprite;
         }
         public MainWindow(List<Elevator> elevators, int countOfFloors):this()
@@ -142,7 +144,7 @@ namespace ElevatorModelUI
                 }
                 
                 var item = build.Children.OfType<Rectangle>().Last();
-                Canvas.SetBottom(elevator, 0);
+                Canvas.SetBottom(elevator, 9);
                 if (countOfElevators != 1)
                 {
                     Canvas.SetLeft(elevator, Canvas.GetLeft(item) + 154);
@@ -161,81 +163,14 @@ namespace ElevatorModelUI
            
         }
 
-        Generator generator = new Generator();
-        QueryController QueryController = new QueryController();
         private void btn_GeneratePassangers_Click(object sender, RoutedEventArgs e)
         {
-          
-            //generator.GetPassangers(People, Floors);
-            People.Add(new Person()
-            {
-                Name = "Roman",
-                CurrentFloor = Floors[2],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "Olga",
-                CurrentFloor = Floors[2],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "Julia",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
+            List<Person> people = generator.GetPassangers(Floors);
 
-            People.Add(new Person()
+            foreach (var person1 in people)
             {
-                Name = "Ron",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-
-            People.Add(new Person()
-            {
-                Name = "Oksa",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "Jeko",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "David",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "Sofa",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-            People.Add(new Person()
-            {
-                Name = "Oleg",
-                CurrentFloor = Floors[0],
-                Weigh = 32,
-                FloorIntention = Floors[2]
-            });
-
-            foreach (var item in People)
-            {
-                QueryController.Add(item, Elevators);
+                QueryController.Add(person1, Elevators);
+                ElevatorController.MakeElevatorRequest(person1.CurrentFloor);
             }
 
             int countOfPersons = 0;
@@ -268,10 +203,58 @@ namespace ElevatorModelUI
                     }
                 }
             }
+            foreach(var person in people)
+            {
+                People.Add(person);
+            }
+        }
+     
+        private void gameElevatorEvent(object sender, EventArgs e)
+        {
+            foreach(var item in Elevators)
+            {
+                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).FirstOrDefault();
+                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + elevatorSpeed);
+
+                if (Canvas.GetBottom(elevator) < 9 || Canvas.GetBottom(elevator)  > 40* (Floors.Count()-1) + 9)
+                {
+                    elevatorSpeed = -elevatorSpeed;
+                }
+
+                foreach (var floor in build.Children.OfType<Rectangle>())
+                {
+                    if ((string)floor.Tag == "floorItem")
+                    {
+                        floor.Stroke = Brushes.Black;
+
+                         Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                         Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+                        
+                        if (elevatorHitBox.IntersectsWith(floorHitBox))
+                        {
+                            // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
+                            // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
+                            
+                            // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
+                            // elevatorSpeed = 0;
+                            // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private void btn_RunModel_Click(object sender, RoutedEventArgs e)
+        {
+            gameTimer.Tick += gameElevatorEvent;
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Start();
         }
 
         private void gameTimerEvent(object sender, EventArgs e)
         {
+            /*
             if (goLeft && Canvas.GetLeft(player) > 5)
             {
                 Canvas.SetLeft(player, Canvas.GetLeft(player) - playerSpeed);
@@ -295,7 +278,7 @@ namespace ElevatorModelUI
                 Canvas.SetTop(player, Canvas.GetTop(player) + playerSpeed);
                 // if go down is true and player is within the boundary from the bottom of the screen
                 // then we can set top of rec1 to move down
-            }
+            }*/
 
             Canvas.SetLeft(box, Canvas.GetLeft(box) + speed);
             if(Canvas.GetLeft(box) < 5 || Canvas.GetLeft(box) + (box.Width * 2) > this.Width)

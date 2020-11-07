@@ -39,7 +39,7 @@ namespace ElevatorModelUI
         public ObservableCollection<Elevator> Elevators { get; set; }
         public ObservableCollection<string> ElevatorTypes { get; set; }
 
-        Building building = new Building();
+      
 
         public InputMenu()
         {
@@ -107,7 +107,7 @@ namespace ElevatorModelUI
                 return;
             }
             elevatorSet.Visibility = Visibility.Visible;
-            building.CountOfFloors = Convert.ToInt32(textBox_FloorsCount.Text);
+
             for(int i = 0; i < Convert.ToInt32(textBox_ElevatorsCount.Text); ++i)
             {
                 Elevators.Add(new Elevator() { ID = $"Elevator_" + (i+1)});
@@ -122,7 +122,7 @@ namespace ElevatorModelUI
 
         private void btn_Set_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow workingSpace = new MainWindow(Elevators.ToList(), building.CountOfFloors);
+            MainWindow workingSpace = new MainWindow(Elevators.ToList(), Convert.ToInt32(textBox_FloorsCount.Text));
             workingSpace.Show();
             this.Close();
         }

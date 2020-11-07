@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ElevatorModelBL.Models
 {
-    public class Building
+    public class QueueOfRequests
     {
-        public int CountOfFloors{ get; set; }
+        
     }
 }
