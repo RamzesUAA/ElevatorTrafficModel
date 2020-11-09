@@ -17,7 +17,7 @@ namespace ElevatorModelBL.Models
         public ElevatorType TypeOfElevator {get;set;}
         public List<Person> PeopleInsideElevator = new List<Person>();
         public int MaxWeigh => (int)TypeOfElevator;
-        List<Floor> QueueOfRequests = new List<Floor>();
+        public List<Floor> QueueOfRequests = new List<Floor>();
         public double CurrentWeigh
         {
             get
@@ -30,13 +30,24 @@ namespace ElevatorModelBL.Models
                 return currentWeigh;
             }
         }
-        public string CurrentDestination
+        public Floor CurrentDestination 
         {
             get
             {
-                return PeopleInsideElevator.Max(p => p.FloorIntention.ID);
+                Floor maxFloor = QueueOfRequests.First();
+                foreach (var item in QueueOfRequests)
+                {
+                    if(string.Compare(item.ID, maxFloor.ID) > 0)
+                    {
+                        maxFloor = item;
+                    }
+                }
+                return maxFloor;
             }
         }
-
+        public override string ToString()
+        {
+            return $"Elvator id: {this.ID}";
+        }
     }
 }

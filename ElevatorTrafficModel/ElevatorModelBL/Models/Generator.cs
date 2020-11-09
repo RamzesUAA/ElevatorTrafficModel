@@ -12,7 +12,7 @@ namespace ElevatorModelBL.Models
         public List<Person> GetPassangers(List<Floor> floors)
         {
             List<Person> people = new List<Person>();
-            int count = rnd.Next(35, 100);
+            int count = rnd.Next(5, 25);
             
             for(int i=0; i < count; ++i)
             {

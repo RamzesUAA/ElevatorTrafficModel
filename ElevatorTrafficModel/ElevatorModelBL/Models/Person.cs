@@ -25,5 +25,10 @@ namespace ElevatorModelBL.Models
         public Floor FloorIntention { get; set; }
         public Floor CurrentFloor { get; set; }
         public float Weigh { get; set; }
+
+        public override string ToString()
+        {
+            return $"Name: {this.Name}, weigh: {this.Weigh}";
+        }
     }
 }

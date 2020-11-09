@@ -49,7 +49,7 @@ namespace ElevatorModelUI
         int speed = 6;
         int elevatorSpeed = 1;
         Generator generator = new Generator();
-        QueryController QueryController = new QueryController();
+        QueryController QueryController;
         ElevatorController ElevatorController = new ElevatorController();
         List<Elevator> Elevators;
         List<Person> People;
@@ -76,6 +76,7 @@ namespace ElevatorModelUI
             FloorsCount = countOfFloors;
             MakeFloors();
             MakeElevators();
+            QueryController = new QueryController(Elevators, Floors);
         }
 
         private void MakeFloors()
@@ -163,6 +164,22 @@ namespace ElevatorModelUI
            
         }
 
+        void MakeRequests()
+        {
+            foreach(var elevator in Elevators)
+            {
+                foreach (var people in QueryController.Queries)
+                {
+                    foreach (var person in people.PeopleInQueue[elevator])
+                    {
+                        elevator.QueueOfRequests.Add(person.CurrentFloor);
+                    }
+                }
+            }
+        }
+
+
+
         private void btn_GeneratePassangers_Click(object sender, RoutedEventArgs e)
         {
             List<Person> people = generator.GetPassangers(Floors);
@@ -170,8 +187,8 @@ namespace ElevatorModelUI
             foreach (var person1 in people)
             {
                 QueryController.Add(person1, Elevators);
-                ElevatorController.MakeElevatorRequest(person1.CurrentFloor);
             }
+            MakeRequests();
 
             int countOfPersons = 0;
             foreach (var item in QueryController.Queries)
@@ -208,7 +225,16 @@ namespace ElevatorModelUI
                 People.Add(person);
             }
         }
-     
+
+        void checkInside(List<Person> people)
+        {
+            string str = "";
+            foreach (var item in people)
+            {
+                str += item.Name += " ";
+            }
+            MessageBox.Show(str);
+        }
         private void gameElevatorEvent(object sender, EventArgs e)
         {
             foreach(var item in Elevators)
@@ -225,7 +251,7 @@ namespace ElevatorModelUI
                 {
                     if ((string)floor.Tag == "floorItem")
                     {
-                        floor.Stroke = Brushes.Black;
+                        floor.Stroke = Brushes.Black;   
 
                          Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
                          Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
@@ -234,7 +260,36 @@ namespace ElevatorModelUI
                         {
                             // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
                             // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
+
+                            var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                            var CurrentQuery = QueryController.GetQuery(currentFloor);
+                            List<Person> currentQueryToTheElevator = CurrentQuery.PeopleInQueue[item];
                             
+                            if (currentQueryToTheElevator==null)
+                            {
+                                continue;
+                            }
+
+
+                            for(int i = 0; i  < currentQueryToTheElevator.Count; ++i)
+                            {
+                           
+                                if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                                {
+                                   // MessageBox.Show(item.ToString());
+                                    
+                                    currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                                }
+                                //checkInside(currentQueryToTheElevator);
+                            }
+                            var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                            for(int i = 0; i < peopleToExit.Count; ++i)
+                            {
+                                peopleToExit.Remove(peopleToExit.First());
+                            }
+
+                            // TODO: зробити розсинхрон ліфів + додати перевірку, щоб вони доїжджали до максимального поверха, який є викликаний, а не до максимального пверху в будинку
+
                             // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
                             // elevatorSpeed = 0;
                             // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
@@ -244,6 +299,8 @@ namespace ElevatorModelUI
             }
         }
 
+
+        
 
         private void btn_RunModel_Click(object sender, RoutedEventArgs e)
         {

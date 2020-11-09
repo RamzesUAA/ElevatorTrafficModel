@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace ElevatorModelBL.Controllers
 {
@@ -13,22 +14,35 @@ namespace ElevatorModelBL.Controllers
         public ElevatorController()
         {
         }
-        List<QueueOfRequests> elevatorController = new List<QueueOfRequests>();
-        public bool ElevatorFilling(Elevator elevator, Person person)
+        public void elevatorController(Query query, Elevator elevator)
         {
-            if (elevator.CurrentWeigh + person.Weigh < elevator.MaxWeigh && string.Compare(elevator.CurrentDestination, person.FloorIntention.ID)>0)
+            var queryToCurrentElevator = query.PeopleInQueue[elevator];
+            foreach(var item in queryToCurrentElevator)
             {
-                elevator.PeopleInsideElevator.Add(person);
+                if(ElevatorFilling(elevator, item))
+                {
+                    queryToCurrentElevator.Remove(item);
+                }
             }
-
-            return true;
         }
 
-        // TODO: реалізувати створення черги, подивитися відео про логіку викликів ліфтів
-        public bool MakeElevatorRequest(Floor floor)
+        public Dictionary<Elevator, List<Floor>> ElevatorQuery = new Dictionary<Elevator, List<Floor>>();
+        public bool ElevatorFilling(Elevator elevator, Person person)
         {
+            if (elevator.CurrentWeigh + person.Weigh < elevator.MaxWeigh && string.Compare(elevator.CurrentDestination.ID, person.FloorIntention.ID)>0)
+            {
+                elevator.PeopleInsideElevator.Add(person);
+                return true;
+            }
+
+            return false;
+        }
 
 
+        // TODO: реалізувати створення черги, подивитися відео про логіку викликів ліфтів
+        public bool MakeElevatorRequest(Person person)
+        {
+            var elevator = person.FloorIntention;
             return true;
         }
     }
