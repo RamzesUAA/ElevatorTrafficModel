@@ -30,9 +30,6 @@
             </Grid.Background>
             <Canvas  x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto" >
                 
-                <Rectangle x:Name="box" Height="35" Width="20" 
-                       Canvas.Left="69"
-                       Canvas.Bottom="50" Canvas.Top="-39"/>
             </Canvas>
         </Grid>
     </Grid>

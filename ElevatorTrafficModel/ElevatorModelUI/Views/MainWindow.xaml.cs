@@ -11,7 +11,7 @@ using System.Windows.Threading;
 using ElevatorModelBL.Controllers;
 using ElevatorModelBL.Models;
 using ElevatorModelBL.Enums;
-
+using System.Runtime.Serialization;
 namespace ElevatorModelUI
 {
     /// <summary>
@@ -68,7 +68,6 @@ namespace ElevatorModelUI
             myCanvas.Focus();
             //  gameTimer.Tick += gameTimerEvent;
             
-            box.Fill = BoySprite;
         }
         public MainWindow(List<Elevator> elevators, int countOfFloors):this()
         {
@@ -94,7 +93,7 @@ namespace ElevatorModelUI
                     Tag = "floorItem"
                 };
 
-                Rectangle item = build.Children.OfType<Rectangle>().Last();
+                Rectangle item = build.Children.OfType<Rectangle>().LastOrDefault();
                 Canvas.SetLeft(floor, 0);
                 if (counter != 1)
                 {
@@ -205,7 +204,8 @@ namespace ElevatorModelUI
                             Height = 30,
                             Width = 20,
                             Fill = countOfPersons % 2 == 0 ? GirlSprite : BoySprite,
-                            Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor
+                            Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor,
+                            ToolTip = new ToolTip{ Content = personInQueue.Name },
                         };
 
   
@@ -235,6 +235,12 @@ namespace ElevatorModelUI
             }
             MessageBox.Show(str);
         }
+
+        // TODO: витягнути з інтернету багато різних імен, сериалізувати їх в JSON формат і потім провести десериалізацію і рандомно присвоювати кожному об'єкту певне ім'я
+        // зробити простий запис даних про стоврених пасажирів ( ім'я, вага, намір їхати на певний поверх, поточний поверх)
+        // інформацію про ліфти ( тип, вантажопідйомність)
+
+
         private void gameElevatorEvent(object sender, EventArgs e)
         {
             foreach(var item in Elevators)
@@ -246,7 +252,7 @@ namespace ElevatorModelUI
                 {
                     elevatorSpeed = -elevatorSpeed;
                 }
-
+                List<Rectangle> person = new List<Rectangle>();
                 foreach (var floor in build.Children.OfType<Rectangle>())
                 {
                     if ((string)floor.Tag == "floorItem")
@@ -276,8 +282,8 @@ namespace ElevatorModelUI
                            
                                 if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
                                 {
-                                   // MessageBox.Show(item.ToString());
-                                    
+                                    // MessageBox.Show(item.ToString());
+                                    person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
                                     currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
                                 }
                                 //checkInside(currentQueryToTheElevator);
@@ -285,6 +291,9 @@ namespace ElevatorModelUI
                             var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
                             for(int i = 0; i < peopleToExit.Count; ++i)
                             {
+                                
+                               
+                                //MessageBox.Show(peopleToExit.First().ToString());
                                 peopleToExit.Remove(peopleToExit.First());
                             }
 
@@ -294,7 +303,13 @@ namespace ElevatorModelUI
                             // elevatorSpeed = 0;
                             // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
                         }
+                        
                     }
+                }
+                for (int i = 0; i < person.Count; i++)
+                {
+                  
+                    build.Children.Remove(person.First());
                 }
             }
         }
@@ -335,13 +350,14 @@ namespace ElevatorModelUI
                 Canvas.SetTop(player, Canvas.GetTop(player) + playerSpeed);
                 // if go down is true and player is within the boundary from the bottom of the screen
                 // then we can set top of rec1 to move down
-            }*/
+            }
 
             Canvas.SetLeft(box, Canvas.GetLeft(box) + speed);
             if(Canvas.GetLeft(box) < 5 || Canvas.GetLeft(box) + (box.Width * 2) > this.Width)
             {
                 speed = -speed;
             }
+            */
         }
 
         private void KeiIsDown(object sender, KeyEventArgs e)

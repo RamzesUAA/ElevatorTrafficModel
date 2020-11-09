@@ -12,7 +12,7 @@ namespace ElevatorModelBL.Models
         public List<Person> GetPassangers(List<Floor> floors)
         {
             List<Person> people = new List<Person>();
-            int count = rnd.Next(5, 25);
+            int count = rnd.Next(5, 10);
             
             for(int i=0; i < count; ++i)
             {
@@ -36,7 +36,7 @@ namespace ElevatorModelBL.Models
 
         private string GetRandomText()
         {
-            return "Person" + GetHashCode();
+            return "Person" + rnd.Next(1,9999999);
         }
     }
 }
