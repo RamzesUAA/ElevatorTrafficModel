@@ -29,20 +29,6 @@ namespace ElevatorModelBL.Controllers
         {
             Query FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
 
-            //if(FloorQuery == null)
-            //{
-            //    FloorQuery = new Query();
-            //    List<Person> list = new List<Person>();
-            //    list.Add(person);
-            //    FloorQuery.NumberOfFloor = person.CurrentFloor;
-            //    FloorQuery.PeopleInQueue.Add(elevators[0], list);
-            //    for(int i = 1; i < elevators.Count ;++i)
-            //    {
-            //        FloorQuery.PeopleInQueue.Add(elevators[i], new List<Person>());
-            //    }
-            //    Queries.Add(FloorQuery);
-            //}
-
             var minFulledElevator = FloorQuery.PeopleInQueue.First();
             foreach (var item in FloorQuery.PeopleInQueue)
             {
@@ -53,8 +39,6 @@ namespace ElevatorModelBL.Controllers
             }
             minFulledElevator.Value.Add(person);
             return minFulledElevator;
-
-            //return FloorQuery.PeopleInQueue.First();
         }
 
 

@@ -47,7 +47,7 @@ namespace ElevatorModelUI
         bool goLeft, goRight, goUp, goDown;
         int playerSpeed = 4;
         int speed = 6;
-        int elevatorSpeed = 1;
+
         Generator generator = new Generator();
         QueryController QueryController;
         ElevatorController ElevatorController = new ElevatorController();
@@ -144,7 +144,7 @@ namespace ElevatorModelUI
                 }
                 
                 var item = build.Children.OfType<Rectangle>().Last();
-                Canvas.SetBottom(elevator, 9);
+                Canvas.SetBottom(elevator, 0);
                 if (countOfElevators != 1)
                 {
                     Canvas.SetLeft(elevator, Canvas.GetLeft(item) + 154);
@@ -205,7 +205,7 @@ namespace ElevatorModelUI
                             Width = 20,
                             Fill = countOfPersons % 2 == 0 ? GirlSprite : BoySprite,
                             Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor,
-                            ToolTip = new ToolTip{ Content = personInQueue.Name },
+                            ToolTip = new ToolTip{ Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention},
                         };
 
   
@@ -216,7 +216,6 @@ namespace ElevatorModelUI
                         Canvas.SetBottom(person, Canvas.GetBottom(currentPosition) + 7);
                         build.Children.Add(person);
                         countInQueue++;
-
                     }
                 }
             }
@@ -238,77 +237,81 @@ namespace ElevatorModelUI
 
         // TODO: витягнути з інтернету багато різних імен, сериалізувати їх в JSON формат і потім провести десериалізацію і рандомно присвоювати кожному об'єкту певне ім'я
         // зробити простий запис даних про стоврених пасажирів ( ім'я, вага, намір їхати на певний поверх, поточний поверх)
-        // інформацію про ліфти ( тип, вантажопідйомність)
+        // інформацію про ліфти (тип, вантажопідйомність)
 
-
+            /// <summary>
+            /// Логіка викликів ліфіта полягає в тому, що кожен ліфт рухається вниз і вгору, при чому він доїжджає до максимально чи мінімально викликаного поверху.
+            /// На проміжних поверхах, він може відповідно висаджувати, або приймати в себе нових пасажирів, якшо їхій intensionFloor співпадає з напрямком руху ліфта, 
+            /// та сумарна вага ліфта дозволяє прийняти нового пасажира
+            /// 
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
         private void gameElevatorEvent(object sender, EventArgs e)
         {
             foreach(var item in Elevators)
             {
-                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).FirstOrDefault();
-                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + elevatorSpeed);
+                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+                int directionFloor = int.Parse(item.CurrentDestination.ID[5].ToString());
 
-                if (Canvas.GetBottom(elevator) < 9 || Canvas.GetBottom(elevator)  > 40* (Floors.Count()-1) + 9)
+               // MessageBox.Show(maxFloor.ToString());
+                if (Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator)  > 40 * (directionFloor -1)+ 9) 
                 {
-                    elevatorSpeed = -elevatorSpeed;
+                    item.ElevatorSpeed = -item.ElevatorSpeed;
                 }
                 List<Rectangle> person = new List<Rectangle>();
-                foreach (var floor in build.Children.OfType<Rectangle>())
+                foreach (var floor in build.Children.OfType<Rectangle>().Where(p=>(string)p.Tag == "floorItem"))
                 {
-                    if ((string)floor.Tag == "floorItem")
+                    floor.Stroke = Brushes.Black;
+
+                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                    Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+
+                    if (elevatorHitBox.IntersectsWith(floorHitBox))
                     {
-                        floor.Stroke = Brushes.Black;   
+                        // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
+                        // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
 
-                         Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
-                         Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
-                        
-                        if (elevatorHitBox.IntersectsWith(floorHitBox))
+                        var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                        var currentQuery = QueryController.GetQuery(currentFloor);
+                        List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
+
+                        if (currentQueryToTheElevator == null)
                         {
-                            // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
-                            // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
-
-                            var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
-                            var CurrentQuery = QueryController.GetQuery(currentFloor);
-                            List<Person> currentQueryToTheElevator = CurrentQuery.PeopleInQueue[item];
-                            
-                            if (currentQueryToTheElevator==null)
-                            {
-                                continue;
-                            }
-
-
-                            for(int i = 0; i  < currentQueryToTheElevator.Count; ++i)
-                            {
-                           
-                                if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
-                                {
-                                    // MessageBox.Show(item.ToString());
-                                    person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
-                                    currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
-                                }
-                                //checkInside(currentQueryToTheElevator);
-                            }
-                            var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
-                            for(int i = 0; i < peopleToExit.Count; ++i)
-                            {
-                                
-                               
-                                //MessageBox.Show(peopleToExit.First().ToString());
-                                peopleToExit.Remove(peopleToExit.First());
-                            }
-
-                            // TODO: зробити розсинхрон ліфів + додати перевірку, щоб вони доїжджали до максимального поверха, який є викликаний, а не до максимального пверху в будинку
-
-                            // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
-                            // elevatorSpeed = 0;
-                            // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
+                            continue;
                         }
-                        
+
+                        for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                        {
+                            if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                            {
+                                MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
+                                person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
+                                currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            //checkInside(currentQueryToTheElevator);
+                        }
+                        var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                        for (int i = 0; i < peopleToExit.Count; ++i)
+                        {
+                            ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                        }
+
+                        // TODO: зробити розсинхрон ліфів + додати перевірку, щоб вони доїжджали до максимального поверха, який є викликаний, а не до максимального пверху в будинку
+
+                        // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
+                        // elevatorSpeed = 0;
+                        // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
                     }
+
                 }
                 for (int i = 0; i < person.Count; i++)
                 {
-                  
                     build.Children.Remove(person.First());
                 }
             }
@@ -322,6 +325,28 @@ namespace ElevatorModelUI
             gameTimer.Tick += gameElevatorEvent;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
             gameTimer.Start();
+        }
+
+        private void btn_StopModel_Click(object sender, RoutedEventArgs e)
+        {
+            gameTimer.Tick -= gameElevatorEvent;
+            gameTimer.Interval = TimeSpan.FromMilliseconds(0);
+            gameTimer.Stop();
+        }
+
+        private void show_ElevatorsInfo_Click(object sender, RoutedEventArgs e)
+        {
+            string str = "";
+            foreach(var item in Elevators)
+            {
+                str += $"{item} elevator, max weigh {item.MaxWeigh}, current weigh: {item.CurrentWeigh}: \n";
+                foreach(var people in item.PeopleInsideElevator)
+                {
+                    str += "    " +  people.Name + ", Intesion floor: " + people.FloorIntention.ID + ", weigh: " +  people.Weigh.ToString() + "\n";
+                }
+                str += "\n";
+            }
+            MessageBox.Show(str);
         }
 
         private void gameTimerEvent(object sender, EventArgs e)

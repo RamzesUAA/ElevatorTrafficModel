@@ -38,6 +38,14 @@ namespace ElevatorModelBL.Controllers
             return false;
         }
 
+        public void ExitFromElevator(Floor floor, Person person, Elevator elevator)
+        {
+            if(person.FloorIntention.ID == floor.ID)
+            {
+                elevator.PeopleInsideElevator.Remove(person);
+            }
+        }
+
 
         // TODO: реалізувати створення черги, подивитися відео про логіку викликів ліфтів
         public bool MakeElevatorRequest(Person person)

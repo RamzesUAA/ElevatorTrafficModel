@@ -110,7 +110,7 @@ namespace ElevatorModelUI
 
             for(int i = 0; i < Convert.ToInt32(textBox_ElevatorsCount.Text); ++i)
             {
-                Elevators.Add(new Elevator() { ID = $"Elevator_" + (i+1)});
+                Elevators.Add(new Elevator() { ID = $"Elevator_" + (i+1), ElevatorSpeed = 1, UpDown = "Up"});
             }
             InitializeSecondWindowComponent();
         }
