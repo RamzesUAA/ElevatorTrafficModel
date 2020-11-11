@@ -205,7 +205,7 @@ namespace ElevatorModelUI
                             Width = 20,
                             Fill = countOfPersons % 2 == 0 ? GirlSprite : BoySprite,
                             Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor,
-                            ToolTip = new ToolTip{ Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention},
+                            ToolTip = new ToolTip{ Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention + ", weight: " + personInQueue.Weigh},
                         };
 
   
@@ -235,6 +235,17 @@ namespace ElevatorModelUI
             MessageBox.Show(str);
         }
 
+        void DirectionSwitch(Elevator item)
+        {
+            if(item.UpDown == "Up")
+            {
+                item.UpDown = "Down";
+            }
+            else
+            {
+                item.UpDown = "Up";
+            }
+        }
         // TODO: витягнути з інтернету багато різних імен, сериалізувати їх в JSON формат і потім провести десериалізацію і рандомно присвоювати кожному об'єкту певне ім'я
         // зробити простий запис даних про стоврених пасажирів ( ім'я, вага, намір їхати на певний поверх, поточний поверх)
         // інформацію про ліфти (тип, вантажопідйомність)
@@ -247,6 +258,8 @@ namespace ElevatorModelUI
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="e"></param>
+            ///
+            /*
         private void gameElevatorEvent(object sender, EventArgs e)
         {
             foreach(var item in Elevators)
@@ -258,6 +271,7 @@ namespace ElevatorModelUI
                // MessageBox.Show(maxFloor.ToString());
                 if (Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator)  > 40 * (directionFloor -1)+ 9) 
                 {
+                    DirectionSwitch(item);
                     item.ElevatorSpeed = -item.ElevatorSpeed;
                 }
                 List<Rectangle> person = new List<Rectangle>();
@@ -316,12 +330,91 @@ namespace ElevatorModelUI
                 }
             }
         }
+        */
+        private void gameElevatorEvent(object sender, EventArgs e)
+        {
+            foreach (var item in Elevators)
+            {
+
+                Floor CurrentDirection;
+                try
+                {
+                    CurrentDirection = item.GetCurrentDirection();
+                }
+                catch (Exception exception)
+                {
+                    item.ElevatorSpeed = 0;
+                    return;
+                }
+
+                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+                List<Rectangle> person = new List<Rectangle>();
+                foreach (var floor in build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem"))
+                {
+                    floor.Stroke = Brushes.Black;
+                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                    Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+
+                    if (elevatorHitBox.IntersectsWith(floorHitBox))
+                    {
+                        var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                        
 
 
-        
+                        int directionFloor = int.Parse(CurrentDirection.ID[5].ToString());
+                        //int currentFloorInt = int.Parse(currentFloor.ID[5].ToString());
+                        Floor isTurnedFloor = item.GetTurnedPoint();
+                        if ((Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator) > 40 * (directionFloor - 1) + 9) && currentFloor == isTurnedFloor || currentFloor == Floors.Last())
+                        {
+                            DirectionSwitch(item);
+                            item.ElevatorSpeed = -item.ElevatorSpeed;
+                        }
+
+                        var currentQuery = QueryController.GetQuery(currentFloor);
+                        List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
+
+                        if (currentQueryToTheElevator == null)
+                        {
+                            continue;
+                        }
+
+                        for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                        {
+                            if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                            {
+                                item.QueueOfRequests.Remove(currentFloor);
+                                item.QueueFromInside.Add(currentQueryToTheElevator.First().FloorIntention);
+                                MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
+                                person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
+                                currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                        for (int i = 0; i < peopleToExit.Count; ++i)
+                        {
+                            item.QueueFromInside.Remove(peopleToExit.First().FloorIntention);
+                            ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                        }
+
+                    }
+
+                }
+                for (int i = 0; i < person.Count; i++)
+                {
+                    build.Children.Remove(person.First());
+                }
+            }
+        }
+
 
         private void btn_RunModel_Click(object sender, RoutedEventArgs e)
         {
+            gameTimer.Tick -= gameElevatorEvent;
             gameTimer.Tick += gameElevatorEvent;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
             gameTimer.Start();
@@ -339,7 +432,7 @@ namespace ElevatorModelUI
             string str = "";
             foreach(var item in Elevators)
             {
-                str += $"{item} elevator, max weigh {item.MaxWeigh}, current weigh: {item.CurrentWeigh}: \n";
+                str += $"{item} elevator, max weigh {item.MaxWeigh}, current weigh: {item.CurrentWeigh}, current direction: {item.GetCurrentDirection()} : \n";
                 foreach(var people in item.PeopleInsideElevator)
                 {
                     str += "    " +  people.Name + ", Intesion floor: " + people.FloorIntention.ID + ", weigh: " +  people.Weigh.ToString() + "\n";

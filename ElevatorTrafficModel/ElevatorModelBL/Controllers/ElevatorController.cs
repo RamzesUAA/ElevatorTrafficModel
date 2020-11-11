@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -29,7 +30,13 @@ namespace ElevatorModelBL.Controllers
         public Dictionary<Elevator, List<Floor>> ElevatorQuery = new Dictionary<Elevator, List<Floor>>();
         public bool ElevatorFilling(Elevator elevator, Person person)
         {
-            if (elevator.CurrentWeigh + person.Weigh < elevator.MaxWeigh && string.Compare(elevator.CurrentDestination.ID, person.FloorIntention.ID)>0)
+            int current = int.Parse(person.CurrentFloor.ID[5].ToString());
+            int intesionFloor = int.Parse(person.FloorIntention.ID[5].ToString());
+            if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor > current  && elevator.UpDown == "Up")
+            {
+                elevator.PeopleInsideElevator.Add(person);
+                return true;
+            }else if((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor < current && elevator.UpDown == "Down")
             {
                 elevator.PeopleInsideElevator.Add(person);
                 return true;

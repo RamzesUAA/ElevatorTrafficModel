@@ -18,6 +18,7 @@ namespace ElevatorModelBL.Models
         public List<Person> PeopleInsideElevator = new List<Person>();
         public int MaxWeigh => (int)TypeOfElevator;
         public List<Floor> QueueOfRequests = new List<Floor>();
+        public List<Floor> QueueFromInside = new List<Floor>();
         public int ElevatorSpeed { get; set; }
         public string UpDown { get; set; }
         public double CurrentWeigh
@@ -32,30 +33,90 @@ namespace ElevatorModelBL.Models
                 return currentWeigh;
             }
         }
+        public Floor GetTurnedPoint()
+        {
+            Floor maxQueue = QueueOfRequests.FirstOrDefault();
+            //int maxFromQueue = int.Parse(QueueOfRequests.First().ID[5].ToString());
+
+            //foreach (var item in QueueOfRequests)
+            //{
+            //    if(maxFromQueue < (int)item.ID[5])
+            //    {
+            //        maxQueue = item;
+            //    }
+            //}
+
+
+            if(QueueFromInside.Count == 0)
+            {
+                return maxQueue;
+            }
+
+            Floor maxInside = QueueFromInside.FirstOrDefault();
+            int maxFromInside = int.Parse(QueueFromInside.First().ID[5].ToString());
+
+            foreach (var item in QueueFromInside)
+            {
+                if (maxFromInside < (int)item.ID[5])
+                {
+                    maxInside = item;
+                }
+            }
+
+
+            if (QueueOfRequests.Count == 0)
+            {
+                return maxInside;
+            }
+
+
+            if (maxQueue.ID[5] > maxInside.ID[5])
+            {
+                return maxQueue;
+            }
+            else
+            {
+                return maxInside;
+            }
+
+
+        }
+        public Floor GetCurrentDirection()
+        {
+            if(QueueFromInside.Count != 0)
+            {
+                return QueueFromInside.FirstOrDefault();
+            }
+            else
+            {
+                return QueueOfRequests.FirstOrDefault();
+            }
+        }
         public Floor CurrentDestination 
         {
             get
             {
-                Floor maxFloor = QueueOfRequests.FirstOrDefault();
+                Floor currentFloor = QueueOfRequests.FirstOrDefault();
                 foreach (var item in QueueOfRequests)
                 {
-                    if(UpDown == "Up")
+                    int current = int.Parse(item.ID[5].ToString());
+                    int intesionFloor = int.Parse(currentFloor.ID[5].ToString());
+                    if (UpDown == "Up")
                     {
-                        if (string.Compare(item.ID, maxFloor.ID) > 0)
+                        if (intesionFloor > current)
                         {
-                            maxFloor = item;
+                            currentFloor = item;
                         }
                     }
-                    else
+                    else if(UpDown == "Down")
                     {
-                        if (string.Compare(item.ID, maxFloor.ID) < 0)
+                        if (intesionFloor < current)
                         {
-                            maxFloor = item;
+                            currentFloor = item;
                         }
                     }
-                    
                 }
-                return maxFloor;
+                return currentFloor;
             }
         }
         public override string ToString()

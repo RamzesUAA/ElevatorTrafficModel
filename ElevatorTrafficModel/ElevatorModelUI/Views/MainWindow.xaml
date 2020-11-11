@@ -19,16 +19,14 @@
                 <Button x:Name="btn_StopModel" Width="164"  Content="Stop model" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="175" Click="btn_StopModel_Click"/>
                 <Button x:Name="btn_Info" Width="164"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="608"/>
                 <Button x:Name="btn_AboutUs" Width="164"  Content="About us" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="608"/>
-                <Button x:Name="show_ElevatorsInfo"  Content="Elevator info" HorizontalAlignment="Center" Click="show_ElevatorsInfo_Click" Canvas.Left="260" Canvas.Top="408"></Button>
-
-                <Label Content="Timer:" RenderTransformOrigin="11.585,1.875" HorizontalAlignment="Center" VerticalAlignment="Stretch"></Label>
+                <Button x:Name="show_ElevatorsInfo"  Content="Elevator info" HorizontalAlignment="Center" Click="show_ElevatorsInfo_Click" Canvas.Left="245" Canvas.Top="260"></Button>
             </Canvas>
         </Grid>
         <Grid  Grid.Column="1">
             <Grid.Background>
                 <ImageBrush ImageSource="/Images/Brick2.jpg"/>
             </Grid.Background>
-            <Canvas  x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto" >
+            <Canvas  x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto">
 
             </Canvas>
         </Grid>
