@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
 
-    <Grid x:Name="myCanvas"  Focusable="True" KeyDown="KeiIsDown" KeyUp="KeyIsUp">
+    <Grid x:Name="myCanvas"  Focusable="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -20,6 +20,7 @@
                 <Button x:Name="btn_Info" Width="164"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="608"/>
                 <Button x:Name="btn_AboutUs" Width="164"  Content="About us" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="608"/>
                 <Button x:Name="show_ElevatorsInfo"  Content="Elevator info" HorizontalAlignment="Center" Click="show_ElevatorsInfo_Click" Canvas.Left="245" Canvas.Top="260"></Button>
+                <Button x:Name="btn_OutPutQueue"  Content="Queue info" HorizontalAlignment="Center" Click="btn_OutPutQueue_Click" Canvas.Left="245" Canvas.Top="340"></Button>
             </Canvas>
         </Grid>
         <Grid  Grid.Column="1">

@@ -28,15 +28,33 @@ namespace ElevatorModelBL.Controllers
         }
 
         public Dictionary<Elevator, List<Floor>> ElevatorQuery = new Dictionary<Elevator, List<Floor>>();
+        //public bool ElevatorFilling(Elevator elevator, Person person)
+        //{
+        //    int current = int.Parse(person.CurrentFloor.ID[5].ToString());
+        //    int intesionFloor = int.Parse(person.FloorIntention.ID[5].ToString());
+        //    if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor > current  && elevator.UpDown == "Up")
+        //    {
+        //        elevator.PeopleInsideElevator.Add(person);
+        //        return true;
+        //    }else if((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor < current && elevator.UpDown == "Down")
+        //    {
+        //        elevator.PeopleInsideElevator.Add(person);
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
         public bool ElevatorFilling(Elevator elevator, Person person)
         {
-            int current = int.Parse(person.CurrentFloor.ID[5].ToString());
+            int current = int.Parse(elevator.GetCurrentDirection().ID[5].ToString());
             int intesionFloor = int.Parse(person.FloorIntention.ID[5].ToString());
-            if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor > current  && elevator.UpDown == "Up")
+            if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor > current && elevator.UpDown == "UP")
             {
                 elevator.PeopleInsideElevator.Add(person);
                 return true;
-            }else if((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor < current && elevator.UpDown == "Down")
+            }
+            else if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor < current && elevator.UpDown == "DOWN")
             {
                 elevator.PeopleInsideElevator.Add(person);
                 return true;

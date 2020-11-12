@@ -50,7 +50,7 @@ namespace ElevatorModelUI
 
         Generator generator = new Generator();
         QueryController QueryController;
-        ElevatorController ElevatorController = new ElevatorController();
+        //ElevatorController ElevatorController = new ElevatorController();
         List<Elevator> Elevators;
         List<Person> People;
         List<Floor> Floors;
@@ -97,7 +97,7 @@ namespace ElevatorModelUI
                 Canvas.SetLeft(floor, 0);
                 if (counter != 1)
                 {
-                    Canvas.SetBottom(floor, Canvas.GetBottom(item) + 40);
+                    Canvas.SetBottom(floor, Canvas.GetBottom(item) + 50);
                 }
                 else
                 {
@@ -163,15 +163,22 @@ namespace ElevatorModelUI
            
         }
 
-        void MakeRequests()
+        void MakeRequests(List<Person> People)
         {
-            foreach(var elevator in Elevators)
+
+            foreach (var elevator in Elevators)
             {
-                foreach (var people in QueryController.Queries)
+                foreach (var person in People)
                 {
-                    foreach (var person in people.PeopleInQueue[elevator])
+                    foreach (var people in QueryController.Queries)
                     {
-                        elevator.QueueOfRequests.Add(person.CurrentFloor);
+                        foreach (var personInQueue in people.PeopleInQueue[elevator])
+                        {
+                            if (personInQueue == person)
+                            {
+                                elevator.QueueOfRequests.Add(person.CurrentFloor);
+                            }
+                        }
                     }
                 }
             }
@@ -183,11 +190,21 @@ namespace ElevatorModelUI
         {
             List<Person> people = generator.GetPassangers(Floors);
 
+            string str = "";
+            foreach (var item in people) //, MAX TURNED FLOOR: {item.MaxTurnedPoint()}, MIN TURNED FLOOR {item.MinTurnedPoint()}
+            {
+                str += $"{item.Name}, current floor: {item.CurrentFloor}\n";
+
+            }
+            MessageBox.Show(str);
+
+            
             foreach (var person1 in people)
             {
                 QueryController.Add(person1, Elevators);
             }
-            MakeRequests();
+            MakeRequests(people);
+
 
             int countOfPersons = 0;
             foreach (var item in QueryController.Queries)
@@ -250,173 +267,359 @@ namespace ElevatorModelUI
         // зробити простий запис даних про стоврених пасажирів ( ім'я, вага, намір їхати на певний поверх, поточний поверх)
         // інформацію про ліфти (тип, вантажопідйомність)
 
-            /// <summary>
-            /// Логіка викликів ліфіта полягає в тому, що кожен ліфт рухається вниз і вгору, при чому він доїжджає до максимально чи мінімально викликаного поверху.
-            /// На проміжних поверхах, він може відповідно висаджувати, або приймати в себе нових пасажирів, якшо їхій intensionFloor співпадає з напрямком руху ліфта, 
-            /// та сумарна вага ліфта дозволяє прийняти нового пасажира
-            /// 
-            /// </summary>
-            /// <param name="sender"></param>
-            /// <param name="e"></param>
-            ///
-            /*
-        private void gameElevatorEvent(object sender, EventArgs e)
+        /// <summary>
+        /// Логіка викликів ліфіта полягає в тому, що кожен ліфт рухається вниз і вгору, при чому він доїжджає до максимально чи мінімально викликаного поверху.
+        /// На проміжних поверхах, він може відповідно висаджувати, або приймати в себе нових пасажирів, якшо їхій intensionFloor співпадає з напрямком руху ліфта, 
+        /// та сумарна вага ліфта дозволяє прийняти нового пасажира
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        ///
+        /*
+    private void gameElevatorEvent(object sender, EventArgs e)
+    {
+        foreach(var item in Elevators)
         {
-            foreach(var item in Elevators)
+            var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+            Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+            int directionFloor = int.Parse(item.CurrentDestination.ID[5].ToString());
+
+           // MessageBox.Show(maxFloor.ToString());
+            if (Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator)  > 40 * (directionFloor -1)+ 9) 
             {
-                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
-                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
-                int directionFloor = int.Parse(item.CurrentDestination.ID[5].ToString());
+                DirectionSwitch(item);
+                item.ElevatorSpeed = -item.ElevatorSpeed;
+            }
+            List<Rectangle> person = new List<Rectangle>();
+            foreach (var floor in build.Children.OfType<Rectangle>().Where(p=>(string)p.Tag == "floorItem"))
+            {
+                floor.Stroke = Brushes.Black;
 
-               // MessageBox.Show(maxFloor.ToString());
-                if (Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator)  > 40 * (directionFloor -1)+ 9) 
+                Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+
+                if (elevatorHitBox.IntersectsWith(floorHitBox))
                 {
-                    DirectionSwitch(item);
-                    item.ElevatorSpeed = -item.ElevatorSpeed;
-                }
-                List<Rectangle> person = new List<Rectangle>();
-                foreach (var floor in build.Children.OfType<Rectangle>().Where(p=>(string)p.Tag == "floorItem"))
-                {
-                    floor.Stroke = Brushes.Black;
+                    // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
+                    // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
 
-                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
-                    Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+                    var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                    var currentQuery = QueryController.GetQuery(currentFloor);
+                    List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
 
-                    if (elevatorHitBox.IntersectsWith(floorHitBox))
+                    if (currentQueryToTheElevator == null)
                     {
-                        // TODO: перевірити, чи хтось хоче виходити на поточному поверсі, якщо ні, то не зупинятись, або, якщо є вільно ще 70 кг
-                        // то тоді зупинитись і перевірити першу людину в черзі, чи її вага є менша за 70 кг і чи вона хоче їхати в тому самому напрямку, куди і рухається 
-
-                        var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
-                        var currentQuery = QueryController.GetQuery(currentFloor);
-                        List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
-
-                        if (currentQueryToTheElevator == null)
-                        {
-                            continue;
-                        }
-
-                        for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
-                        {
-                            if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
-                            {
-                                MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
-                                person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
-                                currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
-                            }
-                            else
-                            {
-                                break;
-                            }
-                            //checkInside(currentQueryToTheElevator);
-                        }
-                        var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
-                        for (int i = 0; i < peopleToExit.Count; ++i)
-                        {
-                            ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
-                        }
-
-                        // TODO: зробити розсинхрон ліфів + додати перевірку, щоб вони доїжджали до максимального поверха, який є викликаний, а не до максимального пверху в будинку
-
-                        // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
-                        // elevatorSpeed = 0;
-                        // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
+                        continue;
                     }
 
+                    for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                    {
+                        if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                        {
+                            MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
+                            person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
+                            currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        //checkInside(currentQueryToTheElevator);
+                    }
+                    var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                    for (int i = 0; i < peopleToExit.Count; ++i)
+                    {
+                        ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                    }
+
+                    // TODO: зробити розсинхрон ліфів + додати перевірку, щоб вони доїжджали до максимального поверха, який є викликаний, а не до максимального пверху в будинку
+
+                    // MessageBox.Show($"{elevator.Name} on the {floor.Name}");
+                    // elevatorSpeed = 0;
+                    // Canvas.SetTop(player, Canvas.GetTop(floor) - player.Height);
                 }
-                for (int i = 0; i < person.Count; i++)
-                {
-                    build.Children.Remove(person.First());
-                }
+
+            }
+            for (int i = 0; i < person.Count; i++)
+            {
+                build.Children.Remove(person.First());
             }
         }
-        */
+    }
+    */
+
+        // TODO: розділити рух ліфта вниз і вгору !!!!!!! це має виправити баг з зависанням між поверхами і безкінечним виходом за карту
+
+
+        /*
+    void MoveUp(Elevator elevator)
+    {
+        elevator.ElevatorSpeed = 1;
+    }
+    void MoveDown(Elevator elevator)
+    {
+        elevator.ElevatorSpeed = -1;
+    }
+    void Stop(Elevator elevator)
+    {
+        elevator.ElevatorSpeed = 0;
+    }
+
+
+    private void gameElevatorEvent(object sender, EventArgs e)
+    {
+        foreach (var item in Elevators)
+        {
+
+            var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+            Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+            List<Rectangle> PersonToDeleteFromModel = new List<Rectangle>();
+            foreach (var floor in build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem"))
+            {
+                floor.Stroke = Brushes.Black;
+                Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+
+                if (elevatorHitBox.IntersectsWith(floorHitBox))
+                {
+                    var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                    int CURRENT_DIRECTION = item.GetCurrentDirection().ID[5];
+                    if (currentFloor.ID[5] < CURRENT_DIRECTION)
+                    {
+                        item.UpDown = "UP";
+                        MoveUp(item);
+                    }else if(currentFloor.ID[5] > CURRENT_DIRECTION)
+                    {
+                        item.UpDown = "DOWN";
+                        MoveDown(item);
+                    }else if(item.GetCurrentDirection() == null)
+                    {
+                        Stop(item);
+                    }
+
+                    var currentQuery = QueryController.GetQuery(currentFloor);
+                    List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
+                    if (currentQueryToTheElevator == null)
+                    {
+                        continue;
+                    }
+
+                    for(int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                    {
+                        if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                        {
+                            item.QueueOfRequests.Remove(currentFloor);
+                            item.QueueFromInside.Add(currentQueryToTheElevator.First().FloorIntention);
+                            MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
+                            PersonToDeleteFromModel = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
+                            currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                    for (int i = 0; i < peopleToExit.Count; ++i)
+                    {
+                        item.QueueFromInside.Remove(peopleToExit.First().FloorIntention);
+                        ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                    }
+                }
+            }
+            for (int i = 0; i < PersonToDeleteFromModel.Count; i++)
+            {
+                build.Children.Remove(PersonToDeleteFromModel.First());
+            }
+        }
+    }
+    */
+
+        
+
+
         private void gameElevatorEvent(object sender, EventArgs e)
         {
             foreach (var item in Elevators)
             {
-
-                Floor CurrentDirection;
-                try
-                {
-                    CurrentDirection = item.GetCurrentDirection();
-                }
-                catch (Exception exception)
-                {
-                    item.ElevatorSpeed = 0;
-                    return;
-                }
-
-                var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
-                Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+                var RectangleElevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+                Canvas.SetBottom(RectangleElevator, Canvas.GetBottom(RectangleElevator) + item.ElevatorSpeed);
                 List<Rectangle> person = new List<Rectangle>();
                 foreach (var floor in build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem"))
                 {
                     floor.Stroke = Brushes.Black;
-                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(RectangleElevator), Canvas.GetBottom(RectangleElevator), RectangleElevator.Width, RectangleElevator.Height);
                     Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
 
                     if (elevatorHitBox.IntersectsWith(floorHitBox))
                     {
                         var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
-                        
 
 
-                        int directionFloor = int.Parse(CurrentDirection.ID[5].ToString());
-                        //int currentFloorInt = int.Parse(currentFloor.ID[5].ToString());
-                        Floor isTurnedFloor = item.GetTurnedPoint();
-                        if ((Canvas.GetBottom(elevator) < 0 || Canvas.GetBottom(elevator) > 40 * (directionFloor - 1) + 9) && currentFloor == isTurnedFloor || currentFloor == Floors.Last())
+                        if(item.MaxTurnedPoint()==null && item.PeopleInsideElevator.Count() == 0)
                         {
-                            DirectionSwitch(item);
-                            item.ElevatorSpeed = -item.ElevatorSpeed;
+                            item.UpDown = "Stopped";
+                            item.ElevatorSpeed = 0;
                         }
+                        else if(item.MaxTurnedPoint()==null && item.PeopleInsideElevator.Count() != 0)
+                        {
+                            item.UpDown = item.UpDown;
+                            item.ElevatorSpeed = item.ElevatorSpeed;
+                        }
+                        else if (currentFloor.ID[5] == item.MaxTurnedPoint().ID[5] || currentFloor.ID[5] == Floors.Last().ID[5])
+                        {
+                            item.UpDown = "DOWN";
+                            item.ElevatorSpeed = -1;
+                        }
+                        else if (currentFloor.ID[5] == item.MinTurnedPoint().ID[5] || currentFloor.ID[5] == Floors.First().ID[5])
+                        {
+                            item.UpDown = "UP";
+                            item.ElevatorSpeed = 1;
+                        }
+
+
+                        //if(currentFloor.ID[5] == item.MinTurnedPoint().ID[5])
+                        //{
+                        //    MessageBox.Show("Returned");
+                        //    item.UpDown = "UP";
+                        //    item.ElevatorSpeed = 1;
+                        //}
+
 
                         var currentQuery = QueryController.GetQuery(currentFloor);
                         List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
 
-                        if (currentQueryToTheElevator == null)
-                        {
-                            continue;
-                        }
+                        //if (currentQueryToTheElevator == null)
+                        //{
+                        //    continue;
+                        //}
 
-                        for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                        for(int i = 0; i < currentQueryToTheElevator.Count; ++i)
                         {
-                            if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                            if(currentQueryToTheElevator[i].FloorIntention.ID[5] > currentFloor.ID[5] && item.UpDown == "UP")
                             {
+                                person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator[i].Name).First());
+                                item.Filling(currentQueryToTheElevator[i]);
                                 item.QueueOfRequests.Remove(currentFloor);
-                                item.QueueFromInside.Add(currentQueryToTheElevator.First().FloorIntention);
-                                MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
-                                person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
-                                currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                                item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
+                                currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
                             }
-                            else
+                            else if(currentQueryToTheElevator[i].FloorIntention.ID[5] < currentFloor.ID[5] && item.UpDown == "DOWN")
                             {
-                                break;
+                                person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator[i].Name).First());
+                                item.Filling(currentQueryToTheElevator[i]);
+                                item.QueueOfRequests.Remove(currentFloor);
+                                item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
+                                currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
                             }
                         }
                         var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
                         for (int i = 0; i < peopleToExit.Count; ++i)
                         {
-                            item.QueueFromInside.Remove(peopleToExit.First().FloorIntention);
-                            ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                            item.QueueFromInside.Remove(peopleToExit[i].FloorIntention);
+                            item.ExitFromElevator(peopleToExit[i]);
                         }
-
                     }
-
                 }
                 for (int i = 0; i < person.Count; i++)
                 {
-                    build.Children.Remove(person.First());
+                    build.Children.Remove(person[i]);
                 }
             }
         }
+
+
+
+
+        /*
+    private void gameElevatorEvent(object sender, EventArgs e)
+    {
+        foreach (var item in Elevators)
+        {
+
+            var elevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
+            Canvas.SetBottom(elevator, Canvas.GetBottom(elevator) + item.ElevatorSpeed);
+            List<Rectangle> person = new List<Rectangle>();
+            foreach (var floor in build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem"))
+            {
+                floor.Stroke = Brushes.Black;
+                Rect elevatorHitBox = new Rect(Canvas.GetLeft(elevator), Canvas.GetBottom(elevator), elevator.Width, elevator.Height);
+                Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+
+                if (elevatorHitBox.IntersectsWith(floorHitBox))
+                {
+                    Floor CurrentDirection = item.GetCurrentDirection();
+
+                    var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                    int? directionFloor;
+
+                    if (CurrentDirection != null)
+                    {
+                        directionFloor = int.Parse(CurrentDirection.ID[5].ToString());
+                    }
+                    else
+                    {
+
+                        item.ElevatorSpeed = 0;
+                        directionFloor = null;
+
+                    }
+
+                    // int currentFloorInt = int.Parse(currentFloor.ID[5].ToString());
+                    Floor isTurnedFloor = item.GetTurnedPoint();
+                    if ((Canvas.GetBottom(elevator) < directionFloor || Canvas.GetBottom(elevator) > 40 * (directionFloor - 1) + 9) && currentFloor == isTurnedFloor || currentFloor == Floors.Last())
+                    {
+                        DirectionSwitch(item);
+                        item.ElevatorSpeed = -1;
+                    }
+
+                    var currentQuery = QueryController.GetQuery(currentFloor);
+                    List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
+
+                    if (currentQueryToTheElevator == null)
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < currentQueryToTheElevator.Count; ++i)
+                    {
+                        if (ElevatorController.ElevatorFilling(item, currentQueryToTheElevator.First()) == true)
+                        {
+                            item.QueueOfRequests.Remove(currentFloor);
+                            item.QueueFromInside.Add(currentQueryToTheElevator.First().FloorIntention);
+                            MessageBox.Show(currentQueryToTheElevator.First().Name.ToString());
+                            person = build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator.First().Name).ToList();
+                            currentQueryToTheElevator.Remove(currentQueryToTheElevator.First());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                    for (int i = 0; i < peopleToExit.Count; ++i)
+                    {
+                        item.QueueFromInside.Remove(peopleToExit.First().FloorIntention);
+                        ElevatorController.ExitFromElevator(currentFloor, peopleToExit.First(), item);
+                    }
+
+                }
+
+            }
+            for (int i = 0; i < person.Count; i++)
+            {
+                build.Children.Remove(person.First());
+            }
+        }
+    }*/
 
 
         private void btn_RunModel_Click(object sender, RoutedEventArgs e)
         {
             gameTimer.Tick -= gameElevatorEvent;
             gameTimer.Tick += gameElevatorEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Interval = TimeSpan.FromMilliseconds(1);
             gameTimer.Start();
         }
 
@@ -430,92 +633,34 @@ namespace ElevatorModelUI
         private void show_ElevatorsInfo_Click(object sender, RoutedEventArgs e)
         {
             string str = "";
-            foreach(var item in Elevators)
+            foreach (var item in Elevators) //, MAX TURNED FLOOR: {item.MaxTurnedPoint()}, MIN TURNED FLOOR {item.MinTurnedPoint()}
             {
-                str += $"{item} elevator, max weigh {item.MaxWeigh}, current weigh: {item.CurrentWeigh}, current direction: {item.GetCurrentDirection()} : \n";
-                foreach(var people in item.PeopleInsideElevator)
+                str += $"{item} elevator, max weigh {item.MaxWeigh}, current weigh: {item.CurrentWeigh}, MAX TURNED FLOOR: {item.MaxTurnedPoint()}, MIN TURNED FLOOR {item.MinTurnedPoint()} \n";
+                foreach (var people in item.PeopleInsideElevator)
                 {
-                    str += "    " +  people.Name + ", Intesion floor: " + people.FloorIntention.ID + ", weigh: " +  people.Weigh.ToString() + "\n";
+                    str += "    " + people.Name + ", Intesion floor: " + people.FloorIntention.ID + ", weigh: " + people.Weigh.ToString() + "\n";
                 }
                 str += "\n";
             }
             MessageBox.Show(str);
         }
 
-        private void gameTimerEvent(object sender, EventArgs e)
+        private void btn_OutPutQueue_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            if (goLeft && Canvas.GetLeft(player) > 5)
+            string str = "";
+            foreach (var item in Elevators) //, MAX TURNED FLOOR: {item.MaxTurnedPoint()}, MIN TURNED FLOOR {item.MinTurnedPoint()}
             {
-                Canvas.SetLeft(player, Canvas.GetLeft(player) - playerSpeed);
-                // if go left is true and player is inside the boundary from the left
-                // then we can set left of the player to move towards left of the screen
+                str += $"{item} elevator, Queue: \n";
+                foreach (var people in item.QueueOfRequests)
+                {
+                    str += "    " + people.ID + "\n";
+                }
+                str += "\n";
             }
-            if (goRight && Canvas.GetLeft(player) + (player.Width + 20) < this.Width)
-            {
-                Canvas.SetLeft(player, Canvas.GetLeft(player) + playerSpeed);
-                // if go right is true and player is inside the boundary from the right
-                // then we can set left of the player to move towards right of the screen
-            } 
-            if (goUp && Canvas.GetTop(player) > 0)
-            {
-                Canvas.SetTop(player, Canvas.GetTop(player) - playerSpeed);
-                // if go up is true and player is within the boundary from the top 
-                // then we can use the set top to move the rec1 towards top of the screen
-            }
-            if (goDown && Canvas.GetTop(player) + (player.Height + 20) < this.Height)
-            {
-                Canvas.SetTop(player, Canvas.GetTop(player) + playerSpeed);
-                // if go down is true and player is within the boundary from the bottom of the screen
-                // then we can set top of rec1 to move down
-            }
-
-            Canvas.SetLeft(box, Canvas.GetLeft(box) + speed);
-            if(Canvas.GetLeft(box) < 5 || Canvas.GetLeft(box) + (box.Width * 2) > this.Width)
-            {
-                speed = -speed;
-            }
-            */
+            MessageBox.Show(str);
         }
 
-        private void KeiIsDown(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Left)
-            {
-                goLeft = true;
-            }
-            if (e.Key == Key.Right)
-            {
-                goRight = true;
-            }
-            if(e.Key == Key.Up)
-            {
-                goUp = true;
-            }
-            if(e.Key == Key.Down)
-            {
-                goDown = true;
-            }
-        }
+       
 
-        private void KeyIsUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Left)
-            {
-                goLeft = false;
-            }
-            if (e.Key == Key.Right)
-            {
-                goRight = false;
-            }
-            if (e.Key == Key.Up)
-            {
-                goUp = false;
-            }
-            if (e.Key == Key.Down)
-            {
-                goDown = false;
-            }
-        }
     }
 }
