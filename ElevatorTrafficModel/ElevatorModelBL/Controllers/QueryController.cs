@@ -25,22 +25,37 @@ namespace ElevatorModelBL.Controllers
                 Queries.Add(FloorQuery);
             }    
         }
-        public KeyValuePair<Elevator,List<Person>> Add(Person person, List<Elevator> elevators)
+        public void Add(List<Person> people, List<Elevator> elevators)
         {
-            Query FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
-
-            var minFulledElevator = FloorQuery.PeopleInQueue.First();
-            foreach (var item in FloorQuery.PeopleInQueue)
+            List<Person> peopleToGoByLadder = new List<Person>();
+            foreach(var person in people)
             {
-                if (minFulledElevator.Value.Count > item.Value.Count)
+                Query FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
+
+                var minFulledElevator = FloorQuery.PeopleInQueue.First();
+                foreach (var item in FloorQuery.PeopleInQueue)
                 {
-                    minFulledElevator = item;
+                    if (minFulledElevator.Value.Count > item.Value.Count)
+                    {
+                        minFulledElevator = item;
+                    }
+                }
+                if(minFulledElevator.Value.Count< 4)
+                {
+                    minFulledElevator.Value.Add(person);
+                }
+                else
+                {
+                    peopleToGoByLadder.Add(person);
                 }
             }
-            minFulledElevator.Value.Add(person);
-            return minFulledElevator;
-        }
+            foreach(var person in peopleToGoByLadder)
+            {
+                people.Remove(person);
+            }
 
+
+        }
 
         public Query GetQuery(Floor floor)
         {

@@ -49,12 +49,12 @@ namespace ElevatorModelBL.Controllers
         {
             int current = int.Parse(elevator.GetCurrentDirection().ID[5].ToString());
             int intesionFloor = int.Parse(person.FloorIntention.ID[5].ToString());
-            if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor > current && elevator.UpDown == "UP")
+            if (intesionFloor > current && elevator.UpDown == "UP")
             {
                 elevator.PeopleInsideElevator.Add(person);
                 return true;
             }
-            else if ((elevator.CurrentWeigh + person.Weigh) < elevator.MaxWeigh && intesionFloor < current && elevator.UpDown == "DOWN")
+            else if (intesionFloor < current && elevator.UpDown == "DOWN")
             {
                 elevator.PeopleInsideElevator.Add(person);
                 return true;

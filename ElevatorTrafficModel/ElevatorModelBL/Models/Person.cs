@@ -22,6 +22,7 @@ namespace ElevatorModelBL.Models
             this.Weigh = Weigh;
         }
         public string Name { get; set; }
+        public string Sex { get; set; }
         public Floor FloorIntention { get; set; }
         public Floor CurrentFloor { get; set; }
         public float Weigh { get; set; }

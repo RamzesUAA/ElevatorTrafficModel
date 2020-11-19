@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElevatorModelUI"
-        mc:Ignorable="d"
+        mc:Ignorable="d" ResizeMode="NoResize"
         Title="MainWindow" Height="720" Width="1280">
 
     <Grid x:Name="myCanvas"  Focusable="True">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="637" />
+            <ColumnDefinition Width="637" />
         </Grid.ColumnDefinitions>
         <Grid Background="#b27ceb">
             <Canvas x:Name="control" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Width="auto" Height="auto">
@@ -21,11 +21,12 @@
                 <Button x:Name="btn_AboutUs" Width="164"  Content="About us" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="608"/>
                 <Button x:Name="show_ElevatorsInfo"  Content="Elevator info" HorizontalAlignment="Center" Click="show_ElevatorsInfo_Click" Canvas.Left="245" Canvas.Top="260"></Button>
                 <Button x:Name="btn_OutPutQueue"  Content="Queue info" HorizontalAlignment="Center" Click="btn_OutPutQueue_Click" Canvas.Left="245" Canvas.Top="340"></Button>
+                <Button x:Name="btn_BackToInputMenu"  Content="Back to input menu" HorizontalAlignment="Center" Click="btn_BackToInputMenu_Click"  Canvas.Left="5" Canvas.Top="5"></Button>
             </Canvas>
         </Grid>
         <Grid  Grid.Column="1">
             <Grid.Background>
-                <ImageBrush ImageSource="/Images/Brick2.jpg"/>
+                <ImageBrush ImageSource="/Images/Background.jpg"/>
             </Grid.Background>
             <Canvas  x:Name="build" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Width="auto" Height="auto">
 

@@ -26,7 +26,6 @@ namespace ElevatorModelUI
             this.Add(ElevatorType.Hydraulic.ToString());
             this.Add(ElevatorType.MachineRoom.ToString());
             this.Add(ElevatorType.Traction.ToString());
-
         }
     }
 
@@ -39,13 +38,11 @@ namespace ElevatorModelUI
         public ObservableCollection<Elevator> Elevators { get; set; }
         public ObservableCollection<string> ElevatorTypes { get; set; }
 
-      
-
         public InputMenu()
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            Elevators = new ObservableCollection<Elevator>();
+            
         }
 
         private void InitializeSecondWindowComponent()
@@ -57,32 +54,6 @@ namespace ElevatorModelUI
         private void btn_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            bool IsDigit;
-           
-            Regex regex = new Regex("[^0-9]+");
-            IsDigit = regex.IsMatch(e.Text);
-            if(IsDigit == true)
-            {
-                e.Handled = true;
-                return;
-            }
-            string digit ="";
-            if (((TextBox)sender).Text.Length != 0)
-            {
-                digit = ((TextBox)sender).Text;
-            }
-
-            digit += e.Text;
-            if(int.Parse(digit) <= 17 && int.Parse(digit) != 0)
-            {
-                e.Handled = false;
-                return;
-            }
-            e.Handled = true;
         }
 
         private bool TextBoxesValidator()
@@ -101,7 +72,8 @@ namespace ElevatorModelUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(!TextBoxesValidator())
+            Elevators = new ObservableCollection<Elevator>();
+            if (!TextBoxesValidator())
             {
                 MessageBox.Show("All fields should be filled");
                 return;
@@ -117,6 +89,7 @@ namespace ElevatorModelUI
 
         private void btn_Back_Click(object sender, RoutedEventArgs e)
         {
+
             elevatorSet.Visibility = Visibility.Hidden;
         }
 
@@ -125,6 +98,54 @@ namespace ElevatorModelUI
             MainWindow workingSpace = new MainWindow(Elevators.ToList(), Convert.ToInt32(textBox_FloorsCount.Text));
             workingSpace.Show();
             this.Close();
+        }
+
+        private void Floors_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            bool IsDigit;
+            Regex regex = new Regex("[^5-9]+");
+            IsDigit = regex.IsMatch(e.Text);
+            if (IsDigit == true)
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
+        private void Elevator_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            bool IsDigit;
+            Regex regex = new Regex("[^1-4]+");
+            IsDigit = regex.IsMatch(e.Text);
+            if (IsDigit == true)
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
+
+
+        private void textBox_ElevatorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            HelperElevatorCount.Visibility = Visibility.Visible;
+
+        }
+
+        private void textBox_ElevatorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            HelperElevatorCount.Visibility = Visibility.Hidden;
+
+        }
+
+        private void textBox_FloorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            HelperFloorCount.Visibility = Visibility.Visible;
+        }
+
+        private void textBox_FloorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            HelperFloorCount.Visibility = Visibility.Hidden;
         }
     }
 }

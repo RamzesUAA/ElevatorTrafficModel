@@ -28,14 +28,21 @@
 
                     <TextBox Margin="15" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              materialDesign:HintAssist.Hint="Floors count" 
-                             PreviewTextInput="TextBox_PreviewTextInput"
-                             MaxLength="2"
-                             x:Name="textBox_FloorsCount"/>
+                             PreviewTextInput="Floors_PreviewTextInput"
+                             MaxLength="1"
+                             x:Name="textBox_FloorsCount"
+                             PreviewGotKeyboardFocus="textBox_FloorsCount_PreviewGotKeyboardFocus"
+                             PreviewLostKeyboardFocus="textBox_FloorsCount_PreviewLostKeyboardFocus"
+                             />
+                    <Label x:Name="HelperFloorCount" Visibility="Hidden" Content="- Floors count should be in the range of 5 to 9" HorizontalAlignment="Center" Margin="4,10" FontWeight="Light" FontSize="12"/>
                     <TextBox Margin="15" Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                              materialDesign:HintAssist.Hint="Elevators count"
-                             PreviewTextInput="TextBox_PreviewTextInput"
-                             MaxLength="2"
-                             x:Name="textBox_ElevatorsCount"/>
+                             PreviewTextInput="Elevator_PreviewTextInput"
+                             MaxLength="1"
+                             x:Name="textBox_ElevatorsCount" 
+                             PreviewGotKeyboardFocus="textBox_ElevatorsCount_PreviewGotKeyboardFocus"
+                             PreviewLostKeyboardFocus="textBox_ElevatorsCount_PreviewLostKeyboardFocus"
+                             />
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="25"/>
@@ -43,7 +50,7 @@
                         </Grid.ColumnDefinitions>
 
                     </Grid>
-
+                    <Label x:Name="HelperElevatorCount" Visibility="Hidden" Content="- Elevators count should be in the range of 1 to 4" HorizontalAlignment="Center" Margin="2 10" FontWeight="Light" FontSize="12"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Margin="15 25" Content="Next" Click="Button_Click"/>
                     </StackPanel >
@@ -78,7 +85,7 @@
                     <Button x:Name="btn_Set" Content="Set" HorizontalAlignment="Left" Margin="220,340,0,28" Click="btn_Set_Click" Width="80"/>
                 </Grid>
             </Border>
-            
+
 
         </StackPanel>
 
