@@ -35,7 +35,7 @@ namespace ElevatorModelBL.Models
         {
             List<Person> people = new List<Person>();
 
-            int count = rnd.Next(4, 27);
+            int count = rnd.Next(15, 35);
             int countOfPersons = 0;
             for(int i=0; i < count; ++i)
             {

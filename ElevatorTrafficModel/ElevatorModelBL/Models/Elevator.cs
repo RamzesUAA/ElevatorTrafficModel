@@ -26,13 +26,10 @@ namespace ElevatorModelBL.Models
             Floor maxQueue = QueueOfRequests.FirstOrDefault();
             Floor maxInside = QueueFromInside.FirstOrDefault();
 
-
             //if (maxQueue == null && maxInside==null)
             //{
             //    return null;
-            //}
-
-            
+            //}            
 
             if (maxQueue == null && maxInside != null)
             {

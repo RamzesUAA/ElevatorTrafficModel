@@ -5,25 +5,117 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElevatorModelUI"
         mc:Ignorable="d" ResizeMode="NoResize"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="Model of elevators" Height="720" Width="1280"
+        Icon="/Images/TractionElevator.png">
+
 
     <Grid x:Name="myCanvas"  Focusable="True">
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Run people generator" Click="btn_RunPassengerGenerator_Click"></MenuItem>
+                <MenuItem Header="Stop people generator" Click="btn_StopPassengerGenerator_Click"></MenuItem>
+
+                <MenuItem Header="Run elevators" Click="btn_RunElevators_Click"></MenuItem>
+                <MenuItem Header="Stop elevators" Click="btn_StopElevators_Click"></MenuItem>
+                <MenuItem Header="Info" Click="btn_Info_Click"></MenuItem>
+                <MenuItem Header="About us" Click="btn_AboutUs_Click"></MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="637" />
             <ColumnDefinition Width="637" />
         </Grid.ColumnDefinitions>
         <Grid Background="#b27ceb">
+
+
+
+            <Menu Height="48" VerticalAlignment="Top" Background="#ab98b8">
+                <MenuItem Header="Program">
+                    <MenuItem Header="Back" Click="btn_BackToInputMenu_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Icons/icons8_back_32.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Restart" Click="btn_Restart_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Icons/reset.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+
+                    <Separator />
+                    <MenuItem Header="Exit" Click="btn_Close_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Icons/icons8_shutdown_32.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Edit" >
+                    <MenuItem Header="Load names from file">
+                        <MenuItem.Icon>
+                            <Image Source="/Icons/icons8_download_32.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Save information into file">
+                        <MenuItem.Icon>
+                            <Image Source="/Icons/icons8_upload_32.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+
+
+
+
+
+
+
             <Canvas x:Name="control" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="0" Width="auto" Height="auto">
-                <Button x:Name="btn_GeneratePassangers" Width="auto"  Content="Generate passangers" Click="btn_GeneratePassangers_Click"  HorizontalAlignment="Center" Canvas.Left="225" Canvas.Top="75"/>
-                <Button x:Name="btn_RunModel" Width="164"  Content="Start model"  HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="175" Click="btn_RunModel_Click"/>
-                <Button x:Name="btn_StopModel" Width="164"  Content="Stop model" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="175" Click="btn_StopModel_Click"/>
-                <Button x:Name="btn_Info" Width="164"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="126" Canvas.Top="608"/>
-                <Button x:Name="btn_AboutUs" Width="164"  Content="About us" HorizontalAlignment="Center" Canvas.Left="345" Canvas.Top="608"/>
-                <Button x:Name="show_ElevatorsInfo"  Content="Elevator info" HorizontalAlignment="Center" Click="show_ElevatorsInfo_Click" Canvas.Left="245" Canvas.Top="260"></Button>
-                <Button x:Name="btn_OutPutQueue"  Content="Queue info" HorizontalAlignment="Center" Click="btn_OutPutQueue_Click" Canvas.Left="245" Canvas.Top="340"></Button>
-                <Button x:Name="btn_BackToInputMenu"  Content="Back to input menu" HorizontalAlignment="Center" Click="btn_BackToInputMenu_Click"  Canvas.Left="5" Canvas.Top="5"></Button>
+
+
+
+
+
+
+                <DataGrid AutoGenerateColumns="False" Name="myGrid" Canvas.Left="20" Canvas.Top="290" Height="245" Width="600" CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn  Header="ID" Binding="{Binding Path=Name}" />
+                        <DataGridTextColumn  Header="Type" Binding="{Binding Path=TypeOfElevator}" />
+                        <DataGridTemplateColumn Header="People inside">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Height="30"
+                        ItemsSource="{Binding PopleInside}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Name"
+                        SelectedValue="{Binding Name}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn  Header="Сurrent weigh" Binding="{Binding Path=CurrentWeigh}" />
+                        <DataGridTextColumn  Header="Max weight" Binding="{Binding Path=MaxWeight}" />
+                        <DataGridTextColumn  Header="Direction" Binding="{Binding Path=FloorDirection}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!--<Button x:Name="btn_GeneratePassangers" Width="auto"  Content="Generate passangers" Click="btn_GeneratePassangers_Click"  HorizontalAlignment="Center" Canvas.Left="395" Canvas.Top="220"/>-->
+
+
+                <Button x:Name="btn_RunElevators" Width="144"  Content="Run elevators"  HorizontalAlignment="Center" Canvas.Left="165" Canvas.Top="150" Click="btn_RunElevators_Click" Height="40"/>
+                <Button x:Name="btn_StopElevators" Width="144"  Content="Stop elevators" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="150" Click="btn_StopElevators_Click" Height="40"/>
+
+                <Button x:Name="btn_RunPassengersGeneretor" Width="144"  Content="Start people generator"  HorizontalAlignment="Center" Canvas.Left="165" Canvas.Top="76" Click="btn_RunPassengerGenerator_Click" Height="40"/>
+                <Button x:Name="btn_StopPassengersGeneretor" Width="144"  Content="Stop people generator" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="76" Click="btn_StopPassengerGenerator_Click" Height="40"/>
+
+
+                <Button x:Name="btn_Info" Width="204"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="70" Canvas.Top="581" Height="43"/>
+                <Button x:Name="btn_AboutUs" Width="204"  Content="About us" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="581" Height="43"/>
+                <Button x:Name="btn_OutPutQueue"  Content="Queue info" HorizontalAlignment="Center" Click="btn_OutPutQueue_Click" Canvas.Left="370" Canvas.Top="235"></Button>
             </Canvas>
         </Grid>
+
+
         <Grid  Grid.Column="1">
             <Grid.Background>
                 <ImageBrush ImageSource="/Images/Background.jpg"/>

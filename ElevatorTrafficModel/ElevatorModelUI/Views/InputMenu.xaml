@@ -8,7 +8,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:staticData="clr-namespace:ElevatorModelView"
-        mc:Ignorable="d" Height="650" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Background="#FF410A66">
+        mc:Ignorable="d" Height="650" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Background="#FF410A66"
+        Title="Model of elevators"
+        Icon="/Images/TractionElevator.png">
 
     <Window.Resources>
         <local:StatusList x:Key="StatusList"/>

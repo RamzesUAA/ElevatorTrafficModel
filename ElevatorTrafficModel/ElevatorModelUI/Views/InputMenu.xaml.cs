@@ -36,7 +36,7 @@ namespace ElevatorModelUI
     public partial class InputMenu : Window
     {
         public ObservableCollection<Elevator> Elevators { get; set; }
-        public ObservableCollection<string> ElevatorTypes { get; set; }
+      //  public ObservableCollection<string> ElevatorTypes { get; set; }
 
         public InputMenu()
         {
