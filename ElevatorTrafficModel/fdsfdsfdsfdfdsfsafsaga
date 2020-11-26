@@ -1,0 +1,181 @@
+[
+  {
+    "ID": "Elevator_1",
+    "MaxWeigh": 1200,
+    "TypeOfElevator": 1200,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Kissinger",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor6"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 109.407661
+      },
+      {
+        "Name": "Krishnamurthy",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor6"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 95.61442
+      },
+      {
+        "Name": "Kabir",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 55.2931175
+      },
+      {
+        "Name": "Cocteau",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 92.83609
+      },
+      {
+        "Name": "Youngman",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 77.94756
+      },
+      {
+        "Name": "Hugo",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor6"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 96.94516
+      },
+      {
+        "Name": "Kripke",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor6"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 97.85269
+      },
+      {
+        "Name": "Malda",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor7"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 52.55607
+      },
+      {
+        "Name": "Valenti",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor7"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 91.85159
+      }
+    ]
+  },
+  {
+    "ID": "Elevator_2",
+    "MaxWeigh": 380,
+    "TypeOfElevator": 380,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Djilas",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 55.40106
+      },
+      {
+        "Name": "Franck",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor6"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 103.067741
+      },
+      {
+        "Name": "Bradley",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor7"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 108.877419
+      },
+      {
+        "Name": "Ashlag",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 77.55958
+      },
+      {
+        "Name": "Campbell",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor7"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 87.55719
+      },
+      {
+        "Name": "Jeffers",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor7"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 65.61144
+      }
+    ]
+  }
+]

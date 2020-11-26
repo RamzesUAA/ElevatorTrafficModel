@@ -52,12 +52,12 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Edit" >
-                    <MenuItem Header="Load names from file">
+                    <MenuItem Header="Load names from file" Click="btn_LoadFileWithNames">
                         <MenuItem.Icon>
                             <Image Source="/Icons/icons8_download_32.png"></Image>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Save information into file">
+                    <MenuItem Header="Save information into file" Click="btn_SaveInfoIntoFile">
                         <MenuItem.Icon>
                             <Image Source="/Icons/icons8_upload_32.png"></Image>
                         </MenuItem.Icon>
@@ -102,15 +102,15 @@
                 <!--<Button x:Name="btn_GeneratePassangers" Width="auto"  Content="Generate passangers" Click="btn_GeneratePassangers_Click"  HorizontalAlignment="Center" Canvas.Left="395" Canvas.Top="220"/>-->
 
 
-                <Button x:Name="btn_RunElevators" Width="144"  Content="Run elevators"  HorizontalAlignment="Center" Canvas.Left="165" Canvas.Top="150" Click="btn_RunElevators_Click" Height="40"/>
-                <Button x:Name="btn_StopElevators" Width="144"  Content="Stop elevators" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="150" Click="btn_StopElevators_Click" Height="40"/>
+                <Button x:Name="btn_RunElevators" Width="184"  Content="Run elevators"  HorizontalAlignment="Center" Canvas.Left="125" Canvas.Top="150" Click="btn_RunElevators_Click" Height="40"/>
+                <Button x:Name="btn_StopElevators" Width="204"  Content="Stop elevators" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="150" Click="btn_StopElevators_Click" Height="40"/>
 
-                <Button x:Name="btn_RunPassengersGeneretor" Width="144"  Content="Start people generator"  HorizontalAlignment="Center" Canvas.Left="165" Canvas.Top="76" Click="btn_RunPassengerGenerator_Click" Height="40"/>
-                <Button x:Name="btn_StopPassengersGeneretor" Width="144"  Content="Stop people generator" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="76" Click="btn_StopPassengerGenerator_Click" Height="40"/>
+                <Button x:Name="btn_RunPassengersGeneretor" Width="184"  Content="Start people generator"  HorizontalAlignment="Center" Canvas.Left="125" Canvas.Top="76" Click="btn_RunPassengerGenerator_Click" Height="40"/>
+                <Button x:Name="btn_StopPassengersGeneretor" Width="204"  Content="Stop people generator" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="76" Click="btn_StopPassengerGenerator_Click" Height="40"/>
 
 
-                <Button x:Name="btn_Info" Width="204"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="70" Canvas.Top="581" Height="43"/>
-                <Button x:Name="btn_AboutUs" Width="204"  Content="About us" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="581" Height="43"/>
+                <Button x:Name="btn_Info" Width="204"  Content="Info"   HorizontalAlignment="Center" Canvas.Left="70" Canvas.Top="581" Height="43" Click="btn_Info_Click"/>
+                <Button x:Name="btn_AboutUs" Width="204"  Content="About us" HorizontalAlignment="Center" Canvas.Left="370" Canvas.Top="581" Height="43" Click="btn_AboutUs_Click"/>
                 <Button x:Name="btn_OutPutQueue"  Content="Queue info" HorizontalAlignment="Center" Click="btn_OutPutQueue_Click" Canvas.Left="370" Canvas.Top="235"></Button>
             </Canvas>
         </Grid>

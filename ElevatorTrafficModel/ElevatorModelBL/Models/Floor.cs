@@ -8,7 +8,8 @@ namespace ElevatorModelBL.Models
 {
     public class Floor
     {
-        public string ID;
+        private string id;
+        public string ID { get { return id; } set { id = value; } }
 
         public override string ToString()
         {

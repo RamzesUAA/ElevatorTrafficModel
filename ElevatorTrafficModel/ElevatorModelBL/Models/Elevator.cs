@@ -1,4 +1,5 @@
 ﻿using ElevatorModelBL.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,126 @@ namespace ElevatorModelBL.Models
 {
     public class Elevator
     {
-        Random random = new Random();
-        public Elevator()
+        private Random random = new Random();
+        public Elevator() { }
+     
+        private string id { get; set; }
+      
+        private List<Person> peopleInsideElevator = new List<Person>();
+        private List<Floor> queueOfRequests = new List<Floor>();
+        private List<Floor> queueFromInside = new List<Floor>();
+        private List<Person> allPeoplesUsedElevator = new List<Person>();
+        private ElevatorType typeOfElevator {get;set;}
+        private int elevatorSpeed { get; set; }
+        private string upDown { get; set; }
+        public string ID
         {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+            }
         }
-        public string ID { get; set; }
-        public ElevatorType TypeOfElevator {get;set;}
-        public List<Person> PeopleInsideElevator = new List<Person>();
         public int MaxWeigh => (int)TypeOfElevator;
-        public List<Floor> QueueOfRequests = new List<Floor>();
-        public List<Floor> QueueFromInside = new List<Floor>();
-        public int ElevatorSpeed { get; set; }
-        public string UpDown { get; set; }
+        public ElevatorType TypeOfElevator
+        {
+            get
+            {
+                return typeOfElevator;
+            }
+            set
+            {
+                typeOfElevator = value;
+            }
+        }
+        public List<Person> AllPeoplesUsedElevator
+        {
+            get
+            {
+                return allPeoplesUsedElevator;
+            }
+            set
+            {
+                allPeoplesUsedElevator = value;
+            }
+        }
+        [JsonIgnore]
+        public List<Person> PeopleInsideElevator
+        {
+            get
+            {
+                return peopleInsideElevator;
+            }
+            set
+            {
+                peopleInsideElevator = value;
+            }
+        }
+        [JsonIgnore]
+        public List<Floor> QueueOfRequests
+        {
+            get
+            {
+                return queueOfRequests;
+            }
+            set
+            {
+                queueOfRequests = value;
+            }
+        }
+        [JsonIgnore]
+        public List<Floor> QueueFromInside
+        {
+            get
+            {
+                return queueFromInside;
+            }
+            set
+            {
+                queueFromInside = value;
+            }
+        }
+        [JsonIgnore]
+        public string UpDown
+        {
+            get
+            {
+                return upDown;
+            }
+            set
+            {
+                upDown = value;
+            }
+        }
+        [JsonIgnore]
+        public int ElevatorSpeed {
+            get 
+            {
+                return elevatorSpeed;
+            }
+            set 
+            {
+                elevatorSpeed = value;
+            }
+        }
+        [JsonIgnore]
+        public double CurrentWeigh
+        {
+            get
+            {
+                double currentWeigh = 0;
+                foreach (var item in PeopleInsideElevator)
+                {
+                    currentWeigh += item.Weigh;
+                }
+                return currentWeigh;
+            }
+        }
+
+
         public Floor MaxTurnedPoint()
         {
             Floor maxQueue = QueueOfRequests.FirstOrDefault();
@@ -177,18 +286,7 @@ namespace ElevatorModelBL.Models
                 return minQueue;
             }
         }
-        public double CurrentWeigh
-        {
-            get
-            {
-                double currentWeigh = 0;
-                foreach(var item in PeopleInsideElevator)
-                {
-                    currentWeigh += item.Weigh;
-                }
-                return currentWeigh;
-            }
-        }
+       
 
         public void Filling(Person person)
         {

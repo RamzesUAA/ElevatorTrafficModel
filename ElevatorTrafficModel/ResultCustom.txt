@@ -1,0 +1,230 @@
+[
+  {
+    "MaxWeigh": 1200,
+    "ID": "Elevator_1",
+    "TypeOfElevator": 1200,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Estefan",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 80.59599
+      },
+      {
+        "Name": "Byrne",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 64.85338
+      },
+      {
+        "Name": "Sturgeon",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 49.0210533
+      },
+      {
+        "Name": "Box",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 58.2030029
+      },
+      {
+        "Name": "Hillel",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 91.1204
+      },
+      {
+        "Name": "Jarmo",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 111.512146
+      },
+      {
+        "Name": "Marie",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 41.0528
+      },
+      {
+        "Name": "Borges",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 35.9892349
+      },
+      {
+        "Name": "Graham",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 100.464317
+      },
+      {
+        "Name": "Shelley",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 111.510147
+      },
+      {
+        "Name": "Lovelace",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 48.6498451
+      },
+      {
+        "Name": "DeWolfe",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 72.17753
+      },
+      {
+        "Name": "LeBlanc",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 35.6885872
+      },
+      {
+        "Name": "Cato",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 76.94681
+      },
+      {
+        "Name": "Drucker",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 79.61391
+      },
+      {
+        "Name": "Steinbeck",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 96.61242
+      },
+      {
+        "Name": "Guderian",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 72.54106
+      },
+      {
+        "Name": "Robbins",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 80.49949
+      },
+      {
+        "Name": "Palgrave",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 77.5781555
+      },
+      {
+        "Name": "Nukem",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 76.20072
+      }
+    ],
+    "CurrentWeigh": 76.200721740722656
+  }
+]

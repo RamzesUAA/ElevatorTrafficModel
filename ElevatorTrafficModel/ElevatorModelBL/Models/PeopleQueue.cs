@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ElevatorModelBL.Models
 {
-    public class Query
+    public class PeopleQueue
     {
-        public Query()
+        public PeopleQueue()
         {
 
         }

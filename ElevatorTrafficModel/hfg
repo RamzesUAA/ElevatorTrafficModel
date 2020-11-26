@@ -1,0 +1,480 @@
+[
+  {
+    "MaxWeigh": 1200,
+    "ID": "Elevator_1",
+    "TypeOfElevator": 1200,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Dhavernas",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 36.9388428
+      },
+      {
+        "Name": "Houdini",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 38.180233
+      },
+      {
+        "Name": "Malthus",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 71.56674
+      },
+      {
+        "Name": "Smith",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 46.65883
+      },
+      {
+        "Name": "Stallman",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 86.20707
+      },
+      {
+        "Name": "Browning",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 87.62117
+      },
+      {
+        "Name": "Chiariglione",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 46.1282043
+      },
+      {
+        "Name": "Novalis",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 102.346985
+      },
+      {
+        "Name": "Henderson",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 36.175808
+      },
+      {
+        "Name": "Yashinsky",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 52.2490425
+      },
+      {
+        "Name": "Fulghum",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 43.91208
+      },
+      {
+        "Name": "Friedman",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 53.074234
+      },
+      {
+        "Name": "Marvell",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 61.3458176
+      },
+      {
+        "Name": "Cohen",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 73.14373
+      },
+      {
+        "Name": "Eckhart",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 59.53298
+      },
+      {
+        "Name": "Dean",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 40.67061
+      },
+      {
+        "Name": "Nietzsche",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 75.75994
+      },
+      {
+        "Name": "Conway",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 102.633438
+      },
+      {
+        "Name": "Julian",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 55.28908
+      },
+      {
+        "Name": "Sun",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 65.90496
+      },
+      {
+        "Name": "Gibbon",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 70.35869
+      },
+      {
+        "Name": "Quayle",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 87.41456
+      }
+    ],
+    "CurrentWeigh": 0.0
+  },
+  {
+    "MaxWeigh": 1200,
+    "ID": "Elevator_2",
+    "TypeOfElevator": 1200,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Reagan",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 56.35828
+      },
+      {
+        "Name": "Tocqueville",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 77.6151047
+      },
+      {
+        "Name": "Gallup",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 52.54904
+      },
+      {
+        "Name": "Zinn",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 80.2314148
+      },
+      {
+        "Name": "Wallace",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 39.5625229
+      },
+      {
+        "Name": "Lec",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 36.5259361
+      },
+      {
+        "Name": "Schopenhauer",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 43.12988
+      },
+      {
+        "Name": "Payne",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 102.982475
+      },
+      {
+        "Name": "Radner",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 53.2815247
+      },
+      {
+        "Name": "Ball",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 107.845627
+      },
+      {
+        "Name": "Wyden",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 47.3856621
+      },
+      {
+        "Name": "Spears",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 49.7745056
+      },
+      {
+        "Name": "Fiszer",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor4"
+        },
+        "Weigh": 60.45066
+      },
+      {
+        "Name": "Pratchett",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 81.70697
+      },
+      {
+        "Name": "Banks",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 66.54822
+      },
+      {
+        "Name": "Gibran",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 114.261406
+      },
+      {
+        "Name": "Aquinas",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 67.49977
+      },
+      {
+        "Name": "Satriani",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 107.58535
+      },
+      {
+        "Name": "Djilas",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 85.255806
+      },
+      {
+        "Name": "Navakasuasua",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 60.1808548
+      }
+    ],
+    "CurrentWeigh": 0.0
+  }
+]

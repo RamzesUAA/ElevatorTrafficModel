@@ -1,0 +1,297 @@
+[
+  {
+    "ID": "Elevator_1",
+    "MaxWeigh": 1200,
+    "TypeOfElevator": 1200,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Zimmermann",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 110.359108
+      },
+      {
+        "Name": "Morrison",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 94.92537
+      },
+      {
+        "Name": "Durante",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 52.25432
+      },
+      {
+        "Name": "Mercury",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 107.992058
+      },
+      {
+        "Name": "Proudhon",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 81.60203
+      },
+      {
+        "Name": "Ray",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 42.8845367
+      },
+      {
+        "Name": "Andric",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 38.8297
+      },
+      {
+        "Name": "Dyer",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 89.7803955
+      },
+      {
+        "Name": "Adams",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 92.34809
+      },
+      {
+        "Name": "Chiariglione",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 85.09535
+      },
+      {
+        "Name": "Long",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 55.2685471
+      }
+    ]
+  },
+  {
+    "ID": "Elevator_2",
+    "MaxWeigh": 670,
+    "TypeOfElevator": 670,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Niven",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 114.393295
+      },
+      {
+        "Name": "Ford",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 61.21351
+      },
+      {
+        "Name": "Kael",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 70.38225
+      },
+      {
+        "Name": "Trollope",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 43.0984077
+      },
+      {
+        "Name": "Gill",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor3"
+        },
+        "Weigh": 74.81038
+      },
+      {
+        "Name": "Wordsworth",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 85.80325
+      },
+      {
+        "Name": "Kawohl",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor2"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 73.40653
+      },
+      {
+        "Name": "Moore",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor1"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 92.12399
+      },
+      {
+        "Name": "Nijinsky",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor3"
+        },
+        "CurrentFloor": {
+          "ID": "floor5"
+        },
+        "Weigh": 62.5489655
+      }
+    ]
+  },
+  {
+    "ID": "Elevator_3",
+    "MaxWeigh": 380,
+    "TypeOfElevator": 380,
+    "AllPeoplesUsedElevator": [
+      {
+        "Name": "Kelvin",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 55.2151642
+      },
+      {
+        "Name": "Peguy",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 96.9541855
+      },
+      {
+        "Name": "Hoffer",
+        "Sex": "Woman",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor1"
+        },
+        "Weigh": 68.34459
+      },
+      {
+        "Name": "Frostrup",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor5"
+        },
+        "CurrentFloor": {
+          "ID": "floor2"
+        },
+        "Weigh": 101.281242
+      },
+      {
+        "Name": "Momoedonu",
+        "Sex": "Man",
+        "FloorIntention": {
+          "ID": "floor4"
+        },
+        "CurrentFloor": {
+          "ID": "floor6"
+        },
+        "Weigh": 49.5749474
+      },
+      {
+        

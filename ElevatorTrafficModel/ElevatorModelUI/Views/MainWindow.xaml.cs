@@ -12,10 +12,9 @@ using ElevatorModelBL.Models;
 using ElevatorModelBL.Enums;
 using System.Data;
 
+
 namespace ElevatorModelUI
 {
-
-   
     /// <summary>
     /// Interaction logic for WorkingSpace.xaml
     /// </summary>
@@ -59,7 +58,7 @@ namespace ElevatorModelUI
 
 
 
-        Generator generator = new Generator();
+        PeopleGenerator generator;
         QueryController QueryController;
         List<Elevator> Elevators;
         List<Person> People;
@@ -70,11 +69,34 @@ namespace ElevatorModelUI
         DispatcherTimer passengersGeneratorTimer = new DispatcherTimer();
         DispatcherTimer tableUpdate = new DispatcherTimer();
 
+        DefaultDialogService defaultDialogService = new DefaultDialogService();
+        JsonFileService jsonFileService = new JsonFileService();
         public event EventHandler PassengersHandler;
         public MainWindow()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
+
+            var Result = MessageBox.Show("Do you want use default data? Be careful, you will not be able to change names after current decision.", 
+                "File reading",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (Result == MessageBoxResult.Yes)
+            {
+                generator = new PeopleGenerator();
+            }
+            else
+            {
+                if (defaultDialogService.OpenFileDialog())
+                {
+                    generator = new PeopleGenerator(defaultDialogService.FilePath);
+                }
+                else
+                {
+                    generator = new PeopleGenerator();
+                }
+            }
 
             People = new List<Person>();
             Floors = new List<Floor>();
@@ -251,13 +273,11 @@ namespace ElevatorModelUI
         // DONE: додати можливість повернення до початкового меню.
         // DONE: пофіксити баг з поверненням назад в початковому меню.
         // DONE: спарсити імена у файл(10000 імен).
+        // DONE: додати трайкетч на перевірку файлу з некоректними даними,  і перевіряти трайкетчем чи існує файл, якщо файлу не існує, то виводити повідомлення через трай кетч.
 
-          
         // TODO: реалізувати продовження руху ліфта після зупинки
-        // TODO: додати трайкетч на перевірку файлу з некоректними даними,  і перевіряти трайкетчем чи існує файл, якщо файлу не існує, то виводити повідомлення через трай кетч.
-        // TODO: додати ще один трайкетч.
-        // TODO: доробити інтерфейс, особливо бекграунд.
-        // TODO: перечитати методичку і додати все, що не портрібно.
+
+
         //private void btn_GeneratePassangers_Click(object sender, RoutedEventArgs e)
         //{
         //    List<Person> people = generator.GetPassangers(Floors);
@@ -269,10 +289,10 @@ namespace ElevatorModelUI
 
         //    }
 
-            
-          
+
+
         //    QueryController.Add(people, Elevators);
-    
+
         //    MakeRequests(people);
 
 
@@ -287,7 +307,7 @@ namespace ElevatorModelUI
         //            }
         //            foreach (var personInQueue in elevator.Value)
         //            {
-                       
+
 
         //                Rectangle person = new Rectangle()
         //                {
@@ -299,18 +319,18 @@ namespace ElevatorModelUI
         //                    ToolTip = new ToolTip{ Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention + ", weight: " + personInQueue.Weigh},
         //                };
 
-                        
+
         //                var currentPosition = build.Children.OfType<Rectangle>().Where(p => p.Name == personInQueue.CurrentFloor.ToString()).FirstOrDefault();
         //                var currentElevatorQueue = build.Children.OfType<Rectangle>().Where(p => p.Name == elevator.Key.ID).FirstOrDefault();
-                      
+
         //                Canvas.SetLeft(person, Canvas.GetLeft(currentElevatorQueue)- 30- countInQueue * 25);
         //                Canvas.SetBottom(person, Canvas.GetBottom(currentPosition) + 7);
         //                build.Children.Add(person);
         //                countInQueue++;
         //            }
-                    
+
         //        }
-                        
+
         //    }
         //    foreach(var person in people)
         //    {
@@ -424,6 +444,7 @@ namespace ElevatorModelUI
                                 {
                                     person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator[i].Name).First());
                                     item.Filling(currentQueryToTheElevator[i]);
+                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[i]);
                                     item.QueueOfRequests.Remove(currentFloor);
                                     item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
                                     currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
@@ -432,6 +453,7 @@ namespace ElevatorModelUI
                                 {
                                     person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator[i].Name).First());
                                     item.Filling(currentQueryToTheElevator[i]);
+                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[i]);
                                     item.QueueOfRequests.Remove(currentFloor);
                                     item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
                                     currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
@@ -444,7 +466,6 @@ namespace ElevatorModelUI
                             item.QueueFromInside.Remove(peopleToExit[i].FloorIntention);
                             item.ExitFromElevator(peopleToExit[i]);
                         }
-
                     }
                 }
                 for (int i = 0; i < person.Count; i++)
@@ -458,6 +479,7 @@ namespace ElevatorModelUI
         {
             foreach(var item in Elevators)
             {
+                item.ElevatorSpeed = 1;
                 item.UpDown = "UP";
             }
         }       
@@ -597,6 +619,43 @@ namespace ElevatorModelUI
         private void btn_AboutUs_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Creator: Roman Alberda\nGroup: SI-21\nCompany: RamzesStudio\nFeedback: +380-96-465-4324", "Model of elevators", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void btn_LoadFileWithNames(object sender, RoutedEventArgs e)
+        {
+            if (defaultDialogService.OpenFileDialog())
+            {
+                MessageBox.Show(defaultDialogService.FilePath);
+                generator.ChoosedNameDeserializer(defaultDialogService.FilePath);
+
+            }
+        }
+
+        private void btn_SaveInfoIntoFile(object sender, RoutedEventArgs e)
+        {
+            var Result = MessageBox.Show("Do you want to save data in default file?", "File reading", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (Result == MessageBoxResult.Yes)
+            {
+                var exePath = AppDomain.CurrentDomain.BaseDirectory;
+                var path = System.IO.Path.Combine(exePath, "Result.txt");
+
+                jsonFileService.Save(path, Elevators);
+            }
+            else
+            {
+                if (defaultDialogService.SaveFileDialog())
+                {
+                    var path = defaultDialogService.FilePath;
+                    jsonFileService.Save(path, Elevators);
+                }
+                else
+                {
+                    var exePath = AppDomain.CurrentDomain.BaseDirectory;
+                    var path = System.IO.Path.Combine(exePath, "Result.txt");
+                    jsonFileService.Save(path, Elevators);
+                }
+            }
         }
     }
 }

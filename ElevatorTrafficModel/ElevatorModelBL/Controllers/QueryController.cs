@@ -9,12 +9,12 @@ namespace ElevatorModelBL.Controllers
 {
     public class QueryController
     {
-        public List<Query> Queries = new List<Query>();
+        public List<PeopleQueue> Queries = new List<PeopleQueue>();
         public QueryController(List<Elevator> elevators, List<Floor> floors)
         {
             foreach(var floor in floors)
             {
-                Query FloorQuery = new Query();
+                PeopleQueue FloorQuery = new PeopleQueue();
                 FloorQuery.NumberOfFloor = floor;
                 foreach (var elevator in elevators)
                 {
@@ -30,7 +30,7 @@ namespace ElevatorModelBL.Controllers
             List<Person> peopleToGoByLadder = new List<Person>();
             foreach(var person in people)
             {
-                Query FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
+                PeopleQueue FloorQuery = Queries.Where(p => p.NumberOfFloor == person.CurrentFloor).FirstOrDefault();
 
                 var minFulledElevator = FloorQuery.PeopleInQueue.First();
                 foreach (var item in FloorQuery.PeopleInQueue)
@@ -57,7 +57,7 @@ namespace ElevatorModelBL.Controllers
 
         }
 
-        public Query GetQuery(Floor floor)
+        public PeopleQueue GetQuery(Floor floor)
         {
             return Queries.Where(p => p.NumberOfFloor == floor).FirstOrDefault();
         }
