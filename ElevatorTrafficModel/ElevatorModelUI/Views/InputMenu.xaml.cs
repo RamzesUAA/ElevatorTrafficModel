@@ -64,6 +64,7 @@ namespace ElevatorModelUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
             Elevators = new ObservableCollection<Elevator>();
             if (!TextBoxesValidator())
             {
@@ -87,6 +88,15 @@ namespace ElevatorModelUI
 
         private void btn_Set_Click(object sender, RoutedEventArgs e)
         {
+            foreach(var elevator in Elevators)
+            {
+                if(elevator.TypeOfElevator == 0)
+                {
+                    MessageBox.Show("You should choose the type for each of the elevators.");
+                    return;
+                }
+            }
+
             MainWindow workingSpace = new MainWindow(Elevators.ToList(), Convert.ToInt32(textBox_FloorsCount.Text));
             workingSpace.Show();
             this.Close();

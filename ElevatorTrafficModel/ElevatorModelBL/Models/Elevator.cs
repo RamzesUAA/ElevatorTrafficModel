@@ -286,7 +286,6 @@ namespace ElevatorModelBL.Models
                 return minQueue;
             }
         }
-       
 
         public void Filling(Person person)
         {
@@ -301,201 +300,21 @@ namespace ElevatorModelBL.Models
         }
 
 
-
-
-
-
-
-
-
-
-        /*
-        public Floor GetTurnedPoint()
-        {
-            Floor maxQueue = QueueOfRequests.FirstOrDefault();
-            //int maxFromQueue = int.Parse(QueueOfRequests.First().ID[5].ToString());
-
-            //foreach (var item in QueueOfRequests)
-            //{
-            //    if(maxFromQueue < (int)item.ID[5])
-            //    {
-            //        maxQueue = item;
-            //    }
-            //}
-
-
-            if(QueueFromInside.Count == 0)
-            {
-                return maxQueue;
-            }
-
-            Floor maxInside = QueueFromInside.FirstOrDefault();
-            int maxFromInside = int.Parse(QueueFromInside.First().ID[5].ToString());
-
-            foreach (var item in QueueFromInside)
-            {
-                if (maxFromInside < (int)item.ID[5])
-                {
-                    maxInside = item;
-                }
-            }
-
-
-            if (QueueOfRequests.Count == 0)
-            {
-                return maxInside;
-            }
-
-
-            if (maxQueue.ID[5] > maxInside.ID[5])
-            {
-                return maxQueue;
-            }
-            else
-            {
-                return maxInside;
-            }
-
-
-        }*/
-
-        /*
-        public Floor GetCurrentDirection()
-        {
-            if(UpDown == "UP")
-            {
-                Floor firstQueue = QueueOfRequests.FirstOrDefault();
-
-                if (QueueFromInside.Count == 0)
-                {
-                    return firstQueue;
-                }
-
-                Floor maxInside = QueueFromInside.FirstOrDefault();
-                int maxFromInside = int.Parse(QueueFromInside.First().ID[5].ToString());
-
-                foreach (var item in QueueFromInside)
-                {
-                    if (maxFromInside < (int)item.ID[5])
-                    {
-                        maxInside = item;
-                    }
-                }
-
-
-                if (QueueOfRequests.Count == 0)
-                {
-                    return maxInside;
-                }
-
-
-                if (firstQueue.ID[5] > maxInside.ID[5])
-                {
-                    return firstQueue;
-                }
-                else
-                {
-                    return maxInside;
-                }
-
-            }else if(UpDown == "DOWN")
-            {
-                Floor firstQueue1 = QueueOfRequests.FirstOrDefault();
-
-                if (QueueFromInside.Count == 0)
-                {
-                    return firstQueue1;
-                }
-
-                Floor minInside = QueueFromInside.FirstOrDefault();
-                int maxFromInside = int.Parse(QueueFromInside.First().ID[5].ToString());
-
-                foreach (var item in QueueFromInside)
-                {
-                    if (maxFromInside > (int)item.ID[5])
-                    {
-                        minInside = item;
-                    }
-                }
-
-
-                if (QueueOfRequests.Count == 0)
-                {
-                    return minInside;
-                }
-
-
-                if (firstQueue1.ID[5] > minInside.ID[5])
-                {
-                    return firstQueue1;
-                }
-                else
-                {
-                    return minInside;
-                }
-            }
-
-            Floor firstQueue2 = QueueOfRequests.FirstOrDefault();
-            return firstQueue2;
-     
-        }
-        */
-
-
-        public Floor GetCurrentDirection()
-        {
-            if(QueueOfRequests.Count !=0)
-            {
-                return QueueOfRequests.FirstOrDefault();
-            }
-            else
-            {
-                return QueueFromInside.First();
-            }
-        }
-        
-        
-        //public Floor CurrentDestination 
+        //public Floor GetCurrentDirection()
         //{
-        //    get
+        //    if(QueueOfRequests.Count !=0)
         //    {
-        //        Floor currentFloor = QueueOfRequests.FirstOrDefault();
-        //        foreach (var item in QueueOfRequests)
-        //        {
-        //            int current = int.Parse(item.ID[5].ToString());
-        //            int intesionFloor = int.Parse(currentFloor.ID[5].ToString());
-        //            if (UpDown == "Up")
-        //            {
-        //                if (intesionFloor > current)
-        //                {
-        //                    currentFloor = item;
-        //                }
-        //            }
-        //            else if(UpDown == "Down")
-        //            {
-        //                if (intesionFloor < current)
-        //                {
-        //                    currentFloor = item;
-        //                }
-        //            }
-        //        }
-        //        return currentFloor;
+        //        return QueueOfRequests.FirstOrDefault();
+        //    }
+        //    else
+        //    {
+        //        return QueueFromInside.First();
         //    }
         //}
-        
+           
         public override string ToString()
         {
             return $"Elvator id: {this.ID}";
         }
-        // public string Some => GetPeopleInside();
-        //public string GetPeopleInside()
-        //{
-        //    string str = "";
-        //    foreach(var item in PeopleInsideElevator)
-        //    {
-        //        str += item.Name += ", ";
-        //    }
-        //    return str;
-        //}
     }
 }

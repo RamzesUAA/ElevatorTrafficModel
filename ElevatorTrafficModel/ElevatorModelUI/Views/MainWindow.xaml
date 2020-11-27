@@ -37,12 +37,6 @@
                             <Image Source="/Icons/icons8_back_32.png"></Image>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Restart" Click="btn_Restart_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Icons/reset.png"></Image>
-                        </MenuItem.Icon>
-                    </MenuItem>
-
 
                     <Separator />
                     <MenuItem Header="Exit" Click="btn_Close_Click">
@@ -95,7 +89,6 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn  Header="Сurrent weigh" Binding="{Binding Path=CurrentWeigh}" />
                         <DataGridTextColumn  Header="Max weight" Binding="{Binding Path=MaxWeight}" />
-                        <DataGridTextColumn  Header="Direction" Binding="{Binding Path=FloorDirection}" />
                     </DataGrid.Columns>
                 </DataGrid>
 

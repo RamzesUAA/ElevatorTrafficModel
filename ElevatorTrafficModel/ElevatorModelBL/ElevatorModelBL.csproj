@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Models\QueryController.cs" />
     <Compile Include="Enums\ElevatorsTypes.cs" />
     <Compile Include="Interfaces\IDialogService.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
@@ -76,7 +76,9 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="DataFiles\NamesJSON.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

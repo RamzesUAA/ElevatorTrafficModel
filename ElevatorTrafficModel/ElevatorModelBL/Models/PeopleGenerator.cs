@@ -41,7 +41,7 @@ namespace ElevatorModelBL.Models
             {
                 if(new FileInfo(path).Length == 0)
                 {
-                    throw new Exception("The file cannot empty.");
+                    throw new Exception("The file cannot be empty.");
                 }
                 Names = jsonFileService.Open(path);
             }
@@ -94,7 +94,7 @@ namespace ElevatorModelBL.Models
         {
             List<Person> people = new List<Person>();
 
-            int count = rnd.Next(15, 35);
+            int count = rnd.Next(10, 32);
             int countOfPersons = 0;
             for(int i=0; i < count; ++i)
             {

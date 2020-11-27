@@ -10,6 +10,7 @@ namespace ElevatorModelBL.Controllers
     public class QueryController
     {
         public List<PeopleQueue> Queries = new List<PeopleQueue>();
+
         public QueryController(List<Elevator> elevators, List<Floor> floors)
         {
             foreach(var floor in floors)
