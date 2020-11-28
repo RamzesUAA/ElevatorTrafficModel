@@ -43,7 +43,7 @@ namespace ElevatorModelUI
         }
 
 
-        private void btn_Close_Click(object sender, RoutedEventArgs e)
+        private void Btn_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
@@ -73,20 +73,20 @@ namespace ElevatorModelUI
             }
             elevatorSet.Visibility = Visibility.Visible;
 
-            for(int i = 0; i < Convert.ToInt32(textBox_ElevatorsCount.Text); ++i)
+            for(var i = 0; i < Convert.ToInt32(textBox_ElevatorsCount.Text); ++i)
             {
-                Elevators.Add(new Elevator() { ID = $"Elevator_" + (i+1), ElevatorSpeed = 1, UpDown = "UP" });
+                Elevators.Add(new Elevator() { Id = $"Elevator_" + (i+1), ElevatorSpeed = 1, UpDown = "UP" });
             }
             InitializeSecondWindowComponent();
         }
 
-        private void btn_Back_Click(object sender, RoutedEventArgs e)
+        private void Btn_Back_Click(object sender, RoutedEventArgs e)
         {
 
             elevatorSet.Visibility = Visibility.Hidden;
         }
 
-        private void btn_Set_Click(object sender, RoutedEventArgs e)
+        private void Btn_Set_Click(object sender, RoutedEventArgs e)
         {
             foreach(var elevator in Elevators)
             {
@@ -104,48 +104,40 @@ namespace ElevatorModelUI
 
         private void Floors_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            bool IsDigit;
-            Regex regex = new Regex("[^5-9]+");
-            IsDigit = regex.IsMatch(e.Text);
-            if (IsDigit == true)
-            {
-                e.Handled = true;
-                return;
-            }
+            var regex = new Regex("[^5-9]+");
+            var isDigit = regex.IsMatch(e.Text);
+            if (isDigit != true) return;
+            e.Handled = true;
         }
 
         private void Elevator_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            bool IsDigit;
-            Regex regex = new Regex("[^1-4]+");
-            IsDigit = regex.IsMatch(e.Text);
-            if (IsDigit == true)
-            {
-                e.Handled = true;
-                return;
-            }
+            var regex = new Regex("[^1-4]+");
+            var isDigit = regex.IsMatch(e.Text);
+            if (isDigit != true) return;
+            e.Handled = true;
         }
 
 
 
-        private void textBox_ElevatorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBox_ElevatorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             HelperElevatorCount.Visibility = Visibility.Visible;
 
         }
 
-        private void textBox_ElevatorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBox_ElevatorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             HelperElevatorCount.Visibility = Visibility.Hidden;
 
         }
 
-        private void textBox_FloorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBox_FloorsCount_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             HelperFloorCount.Visibility = Visibility.Visible;
         }
 
-        private void textBox_FloorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBox_FloorsCount_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             HelperFloorCount.Visibility = Visibility.Hidden;
         }

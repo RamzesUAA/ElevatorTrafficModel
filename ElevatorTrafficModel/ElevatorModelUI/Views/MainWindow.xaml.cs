@@ -10,96 +10,91 @@ using System.Windows.Threading;
 using ElevatorModelBL.Controllers;
 using ElevatorModelBL.Models;
 using ElevatorModelBL.Enums;
-using System.Data;
-
+using ElevatorModelBL.Services;
+using ElevatorModelBL.Additional_models;
 
 namespace ElevatorModelUI
 {
-    /// <summary>
-    /// Interaction logic for WorkingSpace.xaml
-    /// </summary>
-    /// 
-
     public partial class MainWindow : Window
     {
-        ImageBrush HydraulicElevator = new ImageBrush()
+        private readonly ImageBrush _hydraulicElevator = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/HydraulicElevator.png"))
         };
-        ImageBrush MachineRoomElevator = new ImageBrush()
+
+        private readonly ImageBrush _machineRoomElevator = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/MachineRoomElevator.png"))
         };
-        ImageBrush TractionElevator = new ImageBrush()
+
+        private readonly ImageBrush _tractionElevator = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/TractionElevator.png"))
         };
-        ImageBrush floorSprite = new ImageBrush()
+
+        private readonly ImageBrush _floorSprite = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Floor.png"))
         };
-        ImageBrush BoySprite = new ImageBrush()
+
+        private readonly ImageBrush _boySprite = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Boy.png"))
         };
-        ImageBrush GirlSprite = new ImageBrush()
+
+        private readonly ImageBrush _girlSprite = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Girl.png"))
         };
-        ImageBrush PictureSprite = new ImageBrush()
+
+        private readonly ImageBrush _pictureSprite = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/PictureWall.jpg"))
         };
-        ImageBrush WindowSprite = new ImageBrush()
+
+        private readonly ImageBrush _windowSprite = new ImageBrush()
         {
             ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/Window.jpg"))
         };
 
 
+        private readonly PeopleGenerator _generator;
+        private readonly QueueController _queryController;
+        private readonly List<Elevator> _elevators;
+        private readonly List<Floor> _floors;
+        public List<DataForTable> DataGridElevators { get; set; }
+        private readonly int _floorsCount;
 
+        private readonly DispatcherTimer _gameTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _passengersGeneratorTimer = new DispatcherTimer();
+        private readonly DispatcherTimer _tableUpdate = new DispatcherTimer();
 
-        PeopleGenerator generator;
-        QueryController QueryController;
-        List<Elevator> Elevators;
-        List<Person> People;
-        List<Floor> Floors;
-        int FloorsCount;
-
-        DispatcherTimer gameTimer = new DispatcherTimer();
-        DispatcherTimer passengersGeneratorTimer = new DispatcherTimer();
-        DispatcherTimer tableUpdate = new DispatcherTimer();
-
-        DefaultDialogService defaultDialogService = new DefaultDialogService();
-        JsonFileService jsonFileService = new JsonFileService();
+        private readonly DefaultDialogService _defaultDialogService = new DefaultDialogService();
+        private readonly JsonFileService _jsonFileService = new JsonFileService();
         public event EventHandler PassengersHandler;
+        /// <summary>
+        /// Startup point of the program.
+        /// </summary>
         public MainWindow()
         {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
-            var Result = MessageBox.Show("Do you want to use default data?", 
+            var result = MessageBox.Show("Do you want to use default data?", 
                 "File reading",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
-            if (Result == MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
-                generator = new PeopleGenerator();
+                _generator = new PeopleGenerator();
             }
             else
             {
-                if (defaultDialogService.OpenFileDialog())
-                {
-                    generator = new PeopleGenerator(defaultDialogService.FilePath);
-                }
-                else
-                {
-                    generator = new PeopleGenerator();
-                }
+                _generator = _defaultDialogService.OpenFileDialog() ? new PeopleGenerator(_defaultDialogService.FilePath) : new PeopleGenerator();
             }
 
-            People = new List<Person>();
-            Floors = new List<Floor>();
+            _floors = new List<Floor>();
 
             myCanvas.Focus();
             RunDataTableRefreshing();
@@ -108,55 +103,54 @@ namespace ElevatorModelUI
         }
         public MainWindow(List<Elevator> elevators, int countOfFloors):this()
         {
-            Elevators = elevators;
-            FloorsCount = countOfFloors;
+            _elevators = elevators;
+            _floorsCount = countOfFloors;
             MakeFloors();
             MakeElevators();
-            QueryController = new QueryController(Elevators, Floors);
+            _queryController = new QueueController(_elevators, _floors);
         }
-
+        /// <summary>
+        /// Method which generate floors on the map.
+        /// </summary>
         private void MakeFloors()
         {
-            int counter = 0;
+            var counter = 0;
 
-            
-            for (int i = 0; i < FloorsCount; ++ i)
+            for (var i = 0; i < _floorsCount; ++i)
             {
                 counter++;
-                Rectangle floor = new Rectangle()
+                var floor = new Rectangle()
                 {
-                    Name = $"floor" + counter,
+                    Name = "floor" + counter,
                     Height = 10,
                     Width = 800,
-                    Fill = floorSprite,
+                    Fill = _floorSprite,
                     Tag = "floorItem"
                 };
 
-                Rectangle item = build.Children.OfType<Rectangle>().Where(p=>(string)p.Tag == "floorItem").LastOrDefault();
+                var item = build.Children.OfType<Rectangle>().LastOrDefault(p => (string)p.Tag == "floorItem");
                 Canvas.SetLeft(floor, 0);
                 if (counter != 1)
                 {
-                    Canvas.SetBottom(floor, Canvas.GetBottom(item) + 75);
-
+                    Canvas.SetBottom(floor, Canvas.GetBottom(item ?? throw new InvalidOperationException()) + 75);
                 }
                 else
                 {
                     Canvas.SetBottom(floor, 0);
-
                 }
 
                 build.Children.Add(floor);
-                Floors.Add(new Floor() { ID = floor.Name });
+                _floors.Add(new Floor() { Id = floor.Name });
 
-                List<Rectangle> pictures = new List<Rectangle>();
-                List<Rectangle> windows = new List<Rectangle>();
-                for (int j = 0; j < Elevators.Count; ++j)
+                var pictures = new List<Rectangle>();
+                var windows = new List<Rectangle>();
+                for (int j = 0; j < _elevators.Count; ++j)
                 {
                     pictures.Add(new Rectangle()
                     {
                         Width = 30,
                         Height = 20,
-                        Fill = PictureSprite,
+                        Fill = _pictureSprite,
                         Tag = "pictureItem"
                     });
 
@@ -164,19 +158,19 @@ namespace ElevatorModelUI
                     {
                         Width = 25,
                         Height = 35,
-                        Fill = WindowSprite,
+                        Fill = _windowSprite,
                         Tag = "windowsItem"
                     });
                 }
 
-                Rectangle lastAddedPicture = build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem").LastOrDefault();
-                int leftPadding = 53;
-                for (int j = 0; j < Elevators.Count; ++j)
+                var lastAddedPicture = build.Children.OfType<Rectangle>().LastOrDefault(p => (string)p.Tag == "floorItem");
+                var leftPadding = 53;
+                for (var j = 0; j < _elevators.Count; ++j)
                 {
                     Canvas.SetLeft(pictures[j], leftPadding);
                     Canvas.SetLeft(windows[j], leftPadding-35);
                     leftPadding += 170; 
-                    Canvas.SetBottom(pictures[j], Canvas.GetBottom(lastAddedPicture) + 35);
+                    Canvas.SetBottom(pictures[j], Canvas.GetBottom(lastAddedPicture ?? throw new InvalidOperationException()) + 35);
                     Canvas.SetBottom(windows[j], Canvas.GetBottom(lastAddedPicture) + 25);
 
                     build.Children.Add(pictures[j]);
@@ -184,72 +178,68 @@ namespace ElevatorModelUI
                 }
             }
         }
-
-      
+        /// <summary>
+        /// Method which generate elevators on the map.
+        /// </summary>
         private void MakeElevators()
         {
             int countOfElevators = 0;
-            foreach (var Elevator in Elevators)
+            foreach (var elevator in _elevators)
             {
-
-                Rectangle elevator = new Rectangle();
+                var newElevator = new Rectangle();
                 countOfElevators++;
-                switch (Elevator.TypeOfElevator)
+                switch (elevator.TypeOfElevator)
                 {
                     case ElevatorType.Hydraulic:
-                        elevator.Name = Elevator.ID;
-                        elevator.Height = 50;
-                        elevator.Width = 30;
-                        elevator.Fill = HydraulicElevator;
-                        elevator.Tag = "elevatorItem";
+                        newElevator.Name = elevator.Id;
+                        newElevator.Height = 50;
+                        newElevator.Width = 30;
+                        newElevator.Fill = _hydraulicElevator;
+                        newElevator.Tag = "elevatorItem";
                         break;
                     case ElevatorType.MachineRoom:
-                        elevator.Name = Elevator.ID;
-                        elevator.Height = 50;
-                        elevator.Width = 30;
-                        elevator.Fill = MachineRoomElevator;
-                        elevator.Tag = "elevatorItem";
+                        newElevator.Name = elevator.Id;
+                        newElevator.Height = 50;
+                        newElevator.Width = 30;
+                        newElevator.Fill = _machineRoomElevator;
+                        newElevator.Tag = "elevatorItem";
                         break;
                     case ElevatorType.Traction:
-                        elevator.Name = Elevator.ID;
-                        elevator.Height = 50;
-                        elevator.Width = 30;
-                        elevator.Fill = TractionElevator;
-                        elevator.Tag = "elevatorItem";
+                        newElevator.Name = elevator.Id;
+                        newElevator.Height = 50;
+                        newElevator.Width = 30;
+                        newElevator.Fill = _tractionElevator;
+                        newElevator.Tag = "elevatorItem";
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
                 var item = build.Children.OfType<Rectangle>().Last();
-                Canvas.SetBottom(elevator, 0);
+                Canvas.SetBottom(newElevator, 0);
                 if (countOfElevators != 1)
                 {
-                    Canvas.SetLeft(elevator, Canvas.GetLeft(item) + 152);
+                    Canvas.SetLeft(newElevator, Canvas.GetLeft(item) + 152);
                 }
                 else
                 {
-                    Canvas.SetLeft(elevator, 146);
+                    Canvas.SetLeft(newElevator, 146);
                 }
-
-
-                build.Children.Add(elevator);
+                build.Children.Add(newElevator);
             }
         }
-
- 
-        private void btn_addFloor_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Method which makes requests from outside of the elevators.
+        /// </summary>
+        /// <param name="people"></param>
+        private void MakeRequests(IReadOnlyCollection<Person> people)
         {
-           
-        }
-
-        void MakeRequests(List<Person> People)
-        {
-
-            foreach (var elevator in Elevators)
+            foreach (var elevator in _elevators)
             {
-                foreach (var person in People)
+                foreach (var person in people)
                 {
-                    foreach (var people in QueryController.Queries)
+                    foreach (var peopleInQueue in _queryController.Queues)
                     {
-                        foreach (var personInQueue in people.PeopleInQueue[elevator])
+                        foreach (var personInQueue in peopleInQueue.PeopleInQueue[elevator])
                         {
                             if (personInQueue == person)
                             {
@@ -260,103 +250,32 @@ namespace ElevatorModelUI
                 }
             }
         }
-
-
-        // DONE: реалізувати перевірку людей в черзі, до одного ліфта максимум може ставати в чергу 4 людини.
-        // DONE: атоматизувати появу нових пасажирів.
-        // DONE: зробити перевірку на ввід кількості поверхів, та кількості пасажирів.
-        // DONE: додати можливість повернення до початкового меню.
-        // DONE: пофіксити баг з поверненням назад в початковому меню.
-        // DONE: спарсити імена у файл(10000 імен).
-        // DONE: додати трайкетч на перевірку файлу з некоректними даними,  і перевіряти трайкетчем чи існує файл, якщо файлу не існує, то виводити повідомлення через трай кетч.
-
-        // TODO: реалізувати продовження руху ліфта після зупинки
-
-
-        //private void btn_GeneratePassangers_Click(object sender, RoutedEventArgs e)
-        //{
-        //    List<Person> people = generator.GetPassangers(Floors);
-
-        //    string str = "";
-        //    foreach (var item in people) 
-        //    {
-        //        str += $"{item.Name}, current floor: {item.CurrentFloor}\n";
-
-        //    }
-
-
-
-        //    QueryController.Add(people, Elevators);
-
-        //    MakeRequests(people);
-
-
-        //    foreach (var item in QueryController.Queries)
-        //    {
-        //        foreach(var elevator in item.PeopleInQueue)
-        //        {
-        //            int countInQueue = 0;
-        //            foreach (var reload in elevator.Value)
-        //            {
-        //                build.Children.Remove(build.Children.OfType<Rectangle>().Where(p => p.Name == reload.Name.ToString()).FirstOrDefault());
-        //            }
-        //            foreach (var personInQueue in elevator.Value)
-        //            {
-
-
-        //                Rectangle person = new Rectangle()
-        //                {
-        //                    Name = personInQueue.Name,
-        //                    Height = 40,
-        //                    Width = 25,
-        //                    Fill = personInQueue.Sex == "Woman" ? GirlSprite : BoySprite,
-        //                    Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor,
-        //                    ToolTip = new ToolTip{ Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention + ", weight: " + personInQueue.Weigh},
-        //                };
-
-
-        //                var currentPosition = build.Children.OfType<Rectangle>().Where(p => p.Name == personInQueue.CurrentFloor.ToString()).FirstOrDefault();
-        //                var currentElevatorQueue = build.Children.OfType<Rectangle>().Where(p => p.Name == elevator.Key.ID).FirstOrDefault();
-
-        //                Canvas.SetLeft(person, Canvas.GetLeft(currentElevatorQueue)- 30- countInQueue * 25);
-        //                Canvas.SetBottom(person, Canvas.GetBottom(currentPosition) + 7);
-        //                build.Children.Add(person);
-        //                countInQueue++;
-        //            }
-
-        //        }
-
-        //    }
-        //    foreach(var person in people)
-        //    {
-        //        People.Add(person);
-        //    }
-        //}
-
-        private void passengerGeneratorEvent(object sender, EventArgs e)
+        /// <summary>
+        /// Event that generates people on a map over a set period.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PassengerGeneratorEvent(object sender, EventArgs e)
         {
-            List<Person> people = generator.GetPassangers(Floors);
-
-            string str = "";
+            var people = _generator.GetPassengers(_floors);
+            var str = "";
             foreach (var item in people)
             {
                 str += $"{item.Name}, current floor: {item.CurrentFloor}\n";
 
             }
-
-            QueryController.Add(people, Elevators);
+            _queryController.Add(people);
 
             MakeRequests(people);
 
-
-            foreach (var item in QueryController.Queries)
+            foreach (var item in _queryController.Queues)
             {
                 foreach (var elevator in item.PeopleInQueue)
                 {
-                    int countInQueue = 0;
+                    var countInQueue = 0;
                     foreach (var reload in elevator.Value)
                     {
-                        build.Children.Remove(build.Children.OfType<Rectangle>().Where(p => p.Name == reload.Name.ToString()).FirstOrDefault());
+                        build.Children.Remove(build.Children.OfType<Rectangle>().FirstOrDefault(p => p.Name == reload.Name.ToString()));
                     }
                     foreach (var personInQueue in elevator.Value)
                     {
@@ -365,52 +284,52 @@ namespace ElevatorModelUI
                             Name = personInQueue.Name,
                             Height = 40,
                             Width = 25,
-                            Fill = personInQueue.Sex == "Woman" ? GirlSprite : BoySprite,
-                            Tag = "passenger" + elevator.Key.ID + item.NumberOfFloor,
-                            ToolTip = new ToolTip { Content = personInQueue.Name + ", floor intension: " + personInQueue.FloorIntention + ", weight: " + personInQueue.Weigh },
+                            Fill = personInQueue.Sex == "Woman" ? _girlSprite : _boySprite,
+                            Tag = "passenger",
+                            ToolTip = new ToolTip { Content = personInQueue.Name + ", floor intention: " + personInQueue.FloorIntention + ", weight: " + personInQueue.Weight },
                         };
 
-                        var currentPosition = build.Children.OfType<Rectangle>().Where(p => p.Name == personInQueue.CurrentFloor.ToString()).FirstOrDefault();
-                        var currentElevatorQueue = build.Children.OfType<Rectangle>().Where(p => p.Name == elevator.Key.ID).FirstOrDefault();
+                        var currentPosition = build.Children.OfType<Rectangle>().FirstOrDefault(p => p.Name == personInQueue.CurrentFloor.ToString());
+                        var currentElevatorQueue = build.Children.OfType<Rectangle>().FirstOrDefault(p => p.Name == elevator.Key.Id);
 
-                        Canvas.SetLeft(person, Canvas.GetLeft(currentElevatorQueue) - 30 - countInQueue * 25);
-                        Canvas.SetBottom(person, Canvas.GetBottom(currentPosition) + 7);
+                        Canvas.SetLeft(person, Canvas.GetLeft(currentElevatorQueue ?? throw new InvalidOperationException()) - 30 - countInQueue * 25);
+                        Canvas.SetBottom(person, Canvas.GetBottom(currentPosition ?? throw new InvalidOperationException()) + 7);
                         build.Children.Add(person);
                         countInQueue++;
                     }
                 }
             }
-            foreach (var person in people)
-            {
-                People.Add(person);
-            }
         }
-
-        private void gameElevatorEvent(object sender, EventArgs e)
+        /// <summary>
+        /// Event which moves elevators on the map. In this event realized main logic of interaction between people, elevators and floor entities.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameElevatorEvent(object sender, EventArgs e)
         {
-            foreach (var item in Elevators)
+            foreach (var item in _elevators)
             {
-                var RectangleElevator = build.Children.OfType<Rectangle>().Where(p => p.Name == item.ID).First();
-                Canvas.SetBottom(RectangleElevator, Canvas.GetBottom(RectangleElevator) + item.ElevatorSpeed);
-                List<Rectangle> person = new List<Rectangle>();
+                var rectangleElevator = build.Children.OfType<Rectangle>().First(p => p.Name == item.Id);
+                Canvas.SetBottom(rectangleElevator, Canvas.GetBottom(rectangleElevator) + item.ElevatorSpeed);
+                var person = new List<Rectangle>();
                 foreach (var floor in build.Children.OfType<Rectangle>().Where(p => (string)p.Tag == "floorItem"))
                 {
                     floor.Stroke = Brushes.Black;
-                    Rect elevatorHitBox = new Rect(Canvas.GetLeft(RectangleElevator), Canvas.GetBottom(RectangleElevator), RectangleElevator.Width, RectangleElevator.Height);
-                    Rect floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
+                    var elevatorHitBox = new Rect(Canvas.GetLeft(rectangleElevator), Canvas.GetBottom(rectangleElevator), rectangleElevator.Width, rectangleElevator.Height);
+                    var floorHitBox = new Rect(Canvas.GetLeft(floor), Canvas.GetBottom(floor), floor.Width, floor.Height);
 
                     if (elevatorHitBox.IntersectsWith(floorHitBox))
                     {
-                        var currentFloor = Floors.Where(p => p.ID == (string)floor.Name).First();
+                        var currentFloor = _floors.First(p => p.Id == (string)floor.Name);
 
-                        if (item.MaxTurnedPoint() == null && item.PeopleInsideElevator.Count() == 0 && item.QueueOfRequests.Count() == 0)
+                        if (item.MaxTurnedPoint() == null && !item.PeopleInsideElevator.Any() && !item.QueueOfRequests.Any())
                         {
                             item.UpDown = "Stopped";
                             item.ElevatorSpeed = 0;
                         }
                         else if (item.QueueOfRequests.Count() != 0 && item.UpDown == "Stopped")
                         {
-                            if (currentFloor.ID[5] > item.QueueOfRequests.First().ID[5])
+                            if (currentFloor.Id[5] > item.QueueOfRequests.First().Id[5])
                             {
                                 item.UpDown = "DOWN";
                                 item.ElevatorSpeed = -1;
@@ -421,200 +340,171 @@ namespace ElevatorModelUI
                                 item.ElevatorSpeed = 1;
                             }
                         }
-                        else if (item.QueueFromInside.Count() == 0 && item.QueueOfRequests.Count() != 0 && currentFloor.ID[5] == item.MaxTurnedPoint().ID[5])
+                        else if (!item.QueueFromInside.Any() && item.QueueOfRequests.Count() != 0 && currentFloor.Id[5] == item.MaxTurnedPoint().Id[5])
                         {
                             item.UpDown = item.UpDown;
                             item.ElevatorSpeed = item.ElevatorSpeed;
                         }
-                        else if (currentFloor.ID[5] == item.MaxTurnedPoint().ID[5])
+                        else if (currentFloor.Id[5] == item.MaxTurnedPoint().Id[5])
                         {
                             item.UpDown = "DOWN";
                             item.ElevatorSpeed = -1;
                         }
-                        else if (currentFloor.ID[5] == item.MinTurnedPoint().ID[5])
+                        else if (currentFloor.Id[5] == item.MinTurnedPoint().Id[5])
                         {
                             item.UpDown = "UP";
                             item.ElevatorSpeed = 1;
                         }
                     
-                        if (currentFloor.ID[5] == Floors.Last().ID[5] && item.UpDown != "Stopped")
+                        if (currentFloor.Id[5] == _floors.Last().Id[5] && item.UpDown != "Stopped" && item.QueueOfRequests.Count() != 0 && !item.QueueFromInside.Any()) 
                         {
                             item.UpDown = "DOWN";
                             item.ElevatorSpeed = -1;
                         }
-                        else if (currentFloor.ID[5] == Floors.First().ID[5] && item.UpDown != "Stopped")
+                        else if (currentFloor.Id[5] == _floors.First().Id[5] && item.UpDown != "Stopped" && item.QueueOfRequests.Count() != 0 && !item.QueueFromInside.Any())
+                        {
+                            item.UpDown = "UP";
+                            item.ElevatorSpeed = 1;
+                        }
+                        else if (currentFloor.Id[5] == _floors.Last().Id[5] && item.UpDown != "Stopped" )
+                        {
+                            item.UpDown = "DOWN";
+                            item.ElevatorSpeed = -1;
+                        }
+                        else if (currentFloor.Id[5] == _floors.First().Id[5] && item.UpDown != "Stopped")
                         {
                             item.UpDown = "UP";
                             item.ElevatorSpeed = 1;
                         }
 
-                        var currentQuery = QueryController.GetQuery(currentFloor);
-                        List<Person> currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
-
-                        for (int i = 0; i < currentQueryToTheElevator.Count(); ++i)
+                        var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
+                        foreach (var t in peopleToExit)
                         {
-                            if ((item.CurrentWeigh + currentQueryToTheElevator[i].Weigh) < item.MaxWeigh)
+                            item.QueueFromInside.Remove(t.FloorIntention);
+                            item.ExitFromElevator(t);
+                        }
+
+                        var currentQuery = _queryController.GetQuery(currentFloor);
+                        var currentQueryToTheElevator = currentQuery.PeopleInQueue[item];
+                        var deleteFromQueue = new List<Person>();
+
+                        for (var j = 0; j < currentQueryToTheElevator.Count(); j++)
+                        {
+                            if (item.CurrentWeight + currentQueryToTheElevator[j].Weight < item.MaxWeight)
                             {
-                                if(currentQueryToTheElevator[i].FloorIntention.ID[5] > currentFloor.ID[5] && item.UpDown == "UP")
+                                if(currentQueryToTheElevator[j].FloorIntention.Id[5] > currentFloor.Id[5] && item.UpDown == "UP")
                                 {
-                                    person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == currentQueryToTheElevator[i].Name).FirstOrDefault());
-                                    item.Filling(currentQueryToTheElevator[i]);
-                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[i]);
+                                    person.Add(build.Children.OfType<Rectangle>().FirstOrDefault(p => (string)p.Name == currentQueryToTheElevator[j].Name));
+                                    item.Filling(currentQueryToTheElevator[j]);
+                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[j]);
                                     item.QueueOfRequests.Remove(currentFloor);
-                                    item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
-                                    currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
+                                    item.QueueFromInside.Add(currentQueryToTheElevator[j].FloorIntention);
+                                    deleteFromQueue.Add(currentQueryToTheElevator[j]);
                                 }
-                                else if(currentQueryToTheElevator[i].FloorIntention.ID[5] < currentFloor.ID[5] && item.UpDown == "DOWN")
+                                else if (currentQueryToTheElevator[j].FloorIntention.Id[5] < currentFloor.Id[5] && item.UpDown == "DOWN")
                                 {
-                                    person.Add(build.Children.OfType<Rectangle>().Where(p => (string)p.Name == (string)currentQueryToTheElevator[i].Name).FirstOrDefault());
-                                    item.Filling(currentQueryToTheElevator[i]);
-                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[i]);
+                                    person.Add(build.Children.OfType<Rectangle>().FirstOrDefault(p => (string)p.Name == currentQueryToTheElevator[j].Name));
+                                    item.Filling(currentQueryToTheElevator[j]);
+                                    item.AllPeoplesUsedElevator.Add(currentQueryToTheElevator[j]);
                                     item.QueueOfRequests.Remove(currentFloor);
-                                    item.QueueFromInside.Add(currentQueryToTheElevator[i].FloorIntention);
-                                    currentQueryToTheElevator.Remove(currentQueryToTheElevator[i]);
+                                    item.QueueFromInside.Add(currentQueryToTheElevator[j].FloorIntention);
+                                    deleteFromQueue.Add(currentQueryToTheElevator[j]);
                                 }
                             }
                         }
-                        var peopleToExit = item.PeopleInsideElevator.Where(p => p.FloorIntention == currentFloor).ToList();
-                        for (int i = 0; i < peopleToExit.Count; ++i)
+                        for (var i = 0; i < deleteFromQueue.Count; ++i)
                         {
-                            item.QueueFromInside.Remove(peopleToExit[i].FloorIntention);
-                            item.ExitFromElevator(peopleToExit[i]);
+                            currentQueryToTheElevator.Remove(deleteFromQueue[i]);
                         }
                     }
                 }
-                for (int i = 0; i < person.Count; i++)
+                for (var i = 0; i < person.Count; i++)
                 {
                     build.Children.Remove(person[i]);
                 }
             }
         }
 
-        private void SetRun()
-        {
-            foreach(var item in Elevators)
-            {
-                if (item.PeopleInsideElevator.Count() != 0 || item.QueueOfRequests.Count() != 0)
-                {
-                    item.ElevatorSpeed = 1;
-                    item.UpDown = "UP";
-                }
-            }
-        }       
-        
-        private void btn_BackToInputMenu_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_BackToInputMenu_Click(object sender, RoutedEventArgs e)
         {
             InputMenu inputMenu = new InputMenu();
             inputMenu.Show();
             this.Close();
         }
-   
-       
-        public class DataForGread
-        {
-            public string Name { get; set; }
-            public List<Person> PopleInside { get; set; }
-            public double CurrentWeigh { get; set; }
-            public double MaxWeight { get; set; }
-            public ElevatorType TypeOfElevator { get; set; }
-            public string FloorDirection { get; set; }
-        }
-
-
+        //------------------------------------------------------------------------------------------
         void RunDataTableRefreshing()
         {
-            tableUpdate.Tick -= DataTableRefreshing;
-            tableUpdate.Tick += DataTableRefreshing;
-            tableUpdate.Interval = TimeSpan.FromMilliseconds(700);
-            tableUpdate.Start();
+            _tableUpdate.Tick -= DataTableRefreshing;
+            _tableUpdate.Tick += DataTableRefreshing;
+            _tableUpdate.Interval = TimeSpan.FromMilliseconds(700);
+            _tableUpdate.Start();
         }
-
+        //------------------------------------------------------------------------------------------
         void StopDataTableRefreshing()
         {
-            tableUpdate.Tick -= DataTableRefreshing;
-            tableUpdate.Interval = TimeSpan.FromSeconds(0);
-            tableUpdate.Stop();
+            _tableUpdate.Tick -= DataTableRefreshing;
+            _tableUpdate.Interval = TimeSpan.FromSeconds(0);
+            _tableUpdate.Stop();
         }
-
-        public List<DataForGread> DataGridElevators { get; set; }
-
+        //------------------------------------------------------------------------------------------
         private void DataTableRefreshing(object sender, EventArgs e)
         {
-            DataGridElevators = new List<DataForGread>();
-            foreach (var item in Elevators)
+            DataGridElevators = new List<DataForTable>();
+            foreach (var item in _elevators)
             {
-                DataGridElevators.Add(new DataForGread() { 
-                    Name = item.ID, 
-                    PopleInside = item.PeopleInsideElevator, 
-                    CurrentWeigh = Math.Round(item.CurrentWeigh,2), 
-                    MaxWeight = item.MaxWeigh,
+                DataGridElevators.Add(new DataForTable() { 
+                    Name = item.Id,
+                    PeopleInside = item.PeopleInsideElevator, 
+                    CurrentWeigh = Math.Round(item.CurrentWeight, 2), 
+                    MaxWeight = item.MaxWeight,
                     TypeOfElevator = item.TypeOfElevator,
                     FloorDirection = item.UpDown
                 });
             }
             myGrid.ItemsSource = DataGridElevators;
         }
-
-
-        private void btn_Close_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
-       
-       
-
-        private void btn_OutPutQueue_Click(object sender, RoutedEventArgs e)
-        {
-            string str = "";
-            foreach (var item in Elevators) 
-            {
-                str += $"{item} elevator, Queue: \n";
-                foreach (var people in item.QueueOfRequests)
-                {
-                    str += "    " + people.ID + "\n";
-                }
-                str += "\n";
-            }
-            MessageBox.Show(str);
-        }
-
-        private void btn_RunElevators_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_RunElevators_Click(object sender, RoutedEventArgs e)
         {
             RunDataTableRefreshing();
-            gameTimer.Tick -= gameElevatorEvent;
-            gameTimer.Tick += gameElevatorEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(5);
-            SetRun();
-            gameTimer.Start();
+            _gameTimer.Tick -= GameElevatorEvent;
+            _gameTimer.Tick += GameElevatorEvent;
+            _gameTimer.Interval = TimeSpan.FromMilliseconds(5);
+            _gameTimer.Start();
         }
-
-        private void btn_StopElevators_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_StopElevators_Click(object sender, RoutedEventArgs e)
         {
-            gameTimer.Tick -= gameElevatorEvent;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(0);
-            gameTimer.Stop();
+            _gameTimer.Tick -= GameElevatorEvent;
+            _gameTimer.Interval = TimeSpan.FromMilliseconds(0);
+            _gameTimer.Stop();
             StopDataTableRefreshing();
         }
-
-        private void btn_RunPassengerGenerator_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_RunPassengerGenerator_Click(object sender, RoutedEventArgs e)
         {
-            PassengersHandler = passengerGeneratorEvent;
+            PassengersHandler = PassengerGeneratorEvent;
             PassengersHandler?.Invoke(this, e);
-            passengersGeneratorTimer.Tick -= passengerGeneratorEvent;
-            passengersGeneratorTimer.Tick += passengerGeneratorEvent;
-            passengersGeneratorTimer.Interval = TimeSpan.FromSeconds(5);
-            passengersGeneratorTimer.Start();
+            _passengersGeneratorTimer.Tick -= PassengerGeneratorEvent;
+            _passengersGeneratorTimer.Tick += PassengerGeneratorEvent;
+            _passengersGeneratorTimer.Interval = TimeSpan.FromSeconds(5);
+            _passengersGeneratorTimer.Start();
         }
-
-        private void btn_StopPassengerGenerator_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_StopPassengerGenerator_Click(object sender, RoutedEventArgs e)
         {
-            passengersGeneratorTimer.Tick -= passengerGeneratorEvent;
-            passengersGeneratorTimer.Interval = TimeSpan.FromSeconds(0);
-            passengersGeneratorTimer.Stop();
+            _passengersGeneratorTimer.Tick -= PassengerGeneratorEvent;
+            _passengersGeneratorTimer.Interval = TimeSpan.FromSeconds(0);
+            _passengersGeneratorTimer.Stop();
         }
-
-        private void btn_Info_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_Info_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("This is a simulation model of elevators in high-rise buildings." +
                 " The user are able to specify the number of floors in the building, the types of elevators and their number." +
@@ -625,43 +515,43 @@ namespace ElevatorModelUI
                 ". The program can graphically display the proposed model.",
                 "Model of elevators", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
-        private void btn_AboutUs_Click(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_AboutUs_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Creator: Roman Alberda\nGroup: SI-21\nCompany: RamzesStudio\nFeedback: +380-96-465-4324", "Model of elevators", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
-        private void btn_LoadFileWithNames(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_LoadFileWithNames(object sender, RoutedEventArgs e)
         {
-            if (defaultDialogService.OpenFileDialog())
+            if (_defaultDialogService.OpenFileDialog())
             {
-                generator.ChoosedNameDeserializer(defaultDialogService.FilePath);
+                _generator.SelectedNameDeserializer(_defaultDialogService.FilePath);
             }
         }
-
-        private void btn_SaveInfoIntoFile(object sender, RoutedEventArgs e)
+        //------------------------------------------------------------------------------------------
+        private void Btn_SaveInfoIntoFile(object sender, RoutedEventArgs e)
         {
-            var Result = MessageBox.Show("Do you want to save data in default file?", "File reading", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show("Do you want to save data in default file?", "File reading", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (Result == MessageBoxResult.Yes)
+            if (result == MessageBoxResult.Yes)
             {
                 var exePath = AppDomain.CurrentDomain.BaseDirectory;
                 var path = System.IO.Path.Combine(exePath, "Result.txt");
 
-                jsonFileService.Save(path, Elevators);
+                _jsonFileService.Save(path, _elevators);
             }
             else
             {
-                if (defaultDialogService.SaveFileDialog())
+                if (_defaultDialogService.SaveFileDialog())
                 {
-                    var path = defaultDialogService.FilePath;
-                    jsonFileService.Save(path, Elevators);
+                    var path = _defaultDialogService.FilePath;
+                    _jsonFileService.Save(path, _elevators);
                 }
                 else
                 {
                     var exePath = AppDomain.CurrentDomain.BaseDirectory;
                     var path = System.IO.Path.Combine(exePath, "Result.txt");
-                    jsonFileService.Save(path, Elevators);
+                    _jsonFileService.Save(path, _elevators);
                 }
             }
         }

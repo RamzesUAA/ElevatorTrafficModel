@@ -1,41 +1,39 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Json;
 using System.Linq;
 using System.Windows;
+using ElevatorModelBL.Additional_models;
+using ElevatorModelBL.Services;
 
 namespace ElevatorModelBL.Models
 {
-    public class PersonName
-    {
-        public string Name { get; set; }
-    }
+    /// <summary>
+    /// Class that describe generator of the people.
+    /// </summary>
     public class PeopleGenerator
     {
-        Random rnd = new Random();
-        static List<PersonName> Names = new List<PersonName>();
-        JsonFileService jsonFileService = new JsonFileService();
-
+        private readonly Random _rnd = new Random();
+        private static List<PersonName> _names = new List<PersonName>();
+        private readonly JsonFileService _jsonFileService = new JsonFileService();
         public PeopleGenerator()
         {
             DefaultNameDeserializer();
         }
         public PeopleGenerator(string path)
         {
-            var isCreated = ChoosedNameDeserializer(path);
+            var isCreated = SelectedNameDeserializer(path);
             if (isCreated == false)
             {
-                if(DefaultNameDeserializer()== false)
-                {
-                    return;
-                }
+                DefaultNameDeserializer();
             }
         }
-
-        public bool ChoosedNameDeserializer(string path)
+        /// <summary>
+        /// Deserializing selected file with names of people.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool SelectedNameDeserializer(string path)
         {
             try
             {
@@ -43,7 +41,7 @@ namespace ElevatorModelBL.Models
                 {
                     throw new Exception("The file cannot be empty.");
                 }
-                Names = jsonFileService.Open(path);
+                _names = _jsonFileService.Open(path);
             }
             catch (FormatException fex)
             {
@@ -59,19 +57,21 @@ namespace ElevatorModelBL.Models
 
             return true;
         }
-
-
+        /// <summary>
+        /// Deserializing default file with names of people.
+        /// </summary>
+        /// <returns></returns>
         private bool DefaultNameDeserializer()
         {
             try
             {
                 var exePath = AppDomain.CurrentDomain.BaseDirectory;
-                var path = Path.Combine(exePath, "DataFiles\\NamesJSON.txt");
+                var path = Path.Combine(exePath, "Data files\\NamesJSON.txt");
                 if(new FileInfo(path).Exists == false)
                 {
-                    throw new Exception("File NamesJSON.txt doesn`t exists. You should add this file into the root of application.");
+                    throw new Exception("File NamesJSON.txt does not exists. You should add this file into the root of application.");
                 }
-                Names = jsonFileService.Open(path);
+                _names = _jsonFileService.Open(path);
 
             }
             catch (FormatException fex)
@@ -89,30 +89,34 @@ namespace ElevatorModelBL.Models
             return true;
           
         }
-
-        public List<Person> GetPassangers(List<Floor> floors)
+        /// <summary>
+        /// Method that randomly generate list of passengers.
+        /// </summary>
+        /// <param name="floors"></param>
+        /// <returns></returns>
+        public List<Person> GetPassengers(List<Floor> floors)
         {
-            List<Person> people = new List<Person>();
+            var people = new List<Person>();
 
-            int count = rnd.Next(10, 32);
-            int countOfPersons = 0;
-            for(int i=0; i < count; ++i)
+            var count = _rnd.Next(10, 32);
+            var countOfPersons = 0;
+            for(var i=0; i < count; ++i)
             {
                 countOfPersons++;
-                int random = rnd.Next(0, floors.Count);
-                int intentionRandom = rnd.Next(0, floors.Count - 1);
+                var random = _rnd.Next(0, floors.Count);
+                var intentionRandom = _rnd.Next(0, floors.Count);
                 while(random == intentionRandom)
                 {
-                    intentionRandom = rnd.Next(0, floors.Count - 1);
+                    intentionRandom = _rnd.Next(0, floors.Count);
                 }
-                string name = "";
-                if (Names.Count == 0 || Names[0].Name == null)
+                var name = "";
+                if (_names.Count == 0 || _names[0].Name == null)
                 {
                     name = GetRandomText();
                 }
                 else
                 {
-                    name = Names[rnd.Next(0, Names.Count-1)].Name;
+                    name = _names[_rnd.Next(0, _names.Count-1)].Name;
                 }
 
                 var person = new Person()
@@ -121,17 +125,20 @@ namespace ElevatorModelBL.Models
                     Name = name,
                     CurrentFloor = floors[random],
                     FloorIntention = floors[intentionRandom],
-                    Weigh = (float)rnd.NextDouble() * (115 - 35) + 35,
+                    Weight = (float)_rnd.NextDouble() * (115 - 35) + 35,
                 };
-                Names.Remove(Names.Where(p=>p.Name == name).FirstOrDefault());
+                _names.Remove(_names.FirstOrDefault(p => p.Name == name));
                 people.Add(person);
             }
             return people;
         }
-
+        /// <summary>
+        /// Overridden method that returns word "Person" which concatenated with randomly generated number.
+        /// </summary>
+        /// <returns></returns>
         private string GetRandomText()
         {
-            return "Person" + rnd.Next(1,9999999);
+            return "Person" + _rnd.Next(1,999999999);
         }
     }
 }

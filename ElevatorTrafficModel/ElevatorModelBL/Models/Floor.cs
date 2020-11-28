@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ElevatorModelBL.Models
+﻿namespace ElevatorModelBL.Models
 {
+    /// <summary>
+    /// Class that describe entity of floor.
+    /// </summary>
     public class Floor
     {
-        private string id;
-        public string ID { get { return id; } set { id = value; } }
-
+        /// <summary>
+        /// A unique identifier for access to the desired floor.
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
+        /// Overridden method ToString() that return id of the floor. 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return ID;
+            return Id;
         }
     }
 }

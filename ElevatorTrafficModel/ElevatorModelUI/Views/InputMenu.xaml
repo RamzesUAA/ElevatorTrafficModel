@@ -16,10 +16,8 @@
         <local:StatusList x:Key="StatusList"/>
     </Window.Resources>
 
-
-
     <Grid  Visibility="Visible">
-        <Button x:Name="btn_Close" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btn_Close_Click"/>
+        <Button x:Name="btn_Close" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Btn_Close_Click"/>
         <StackPanel Margin="50">
             <Image  gif:ImageBehavior.AnimatedSource="/Assets/RamzesLogo.gif" Height="150" />
             <Border Background="White" Margin="0,10" CornerRadius="5" Height="390">
@@ -32,8 +30,8 @@
                              PreviewTextInput="Floors_PreviewTextInput"
                              MaxLength="1"
                              x:Name="textBox_FloorsCount"
-                             PreviewGotKeyboardFocus="textBox_FloorsCount_PreviewGotKeyboardFocus"
-                             PreviewLostKeyboardFocus="textBox_FloorsCount_PreviewLostKeyboardFocus"
+                             PreviewGotKeyboardFocus="TextBox_FloorsCount_PreviewGotKeyboardFocus"
+                             PreviewLostKeyboardFocus="TextBox_FloorsCount_PreviewLostKeyboardFocus"
                              />
                     <Label x:Name="HelperFloorCount" Visibility="Hidden" FontWeight="DemiBold" Content="- Floors count should be in the range of 5 to 9" HorizontalAlignment="Center" Margin="4,10" FontSize="12"/>
                     <TextBox Margin="15" Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -41,10 +39,9 @@
                              PreviewTextInput="Elevator_PreviewTextInput"
                              MaxLength="1"
                              x:Name="textBox_ElevatorsCount" 
-                             PreviewGotKeyboardFocus="textBox_ElevatorsCount_PreviewGotKeyboardFocus"
-                             PreviewLostKeyboardFocus="textBox_ElevatorsCount_PreviewLostKeyboardFocus"
-                             />
-                    <Grid >
+                             PreviewGotKeyboardFocus="TextBox_ElevatorsCount_PreviewGotKeyboardFocus"
+                             PreviewLostKeyboardFocus="TextBox_ElevatorsCount_PreviewLostKeyboardFocus"/>
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="25"/>
                             <ColumnDefinition/>
@@ -65,7 +62,7 @@
                 <Grid  x:Name="DataGrid">
                     <DataGrid x:Name="dgData" AutoGenerateColumns="False" CanUserAddRows="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding ID}" Header="ID" Width="100"  />
+                            <DataGridTextColumn Binding="{Binding Id}" Header="ID" Width="100"  />
 
                             <DataGridTemplateColumn Header="People inside">
                                 
@@ -80,14 +77,10 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="btn_Back" Content="Back" HorizontalAlignment="Left" Margin="10,340,0,28" Click="btn_Back_Click" Width="80"/>
-                    <Button x:Name="btn_Set" Content="Set" HorizontalAlignment="Left" Margin="220,340,0,28" Click="btn_Set_Click" Width="80"/>
+                    <Button x:Name="btn_Back" Content="Back" HorizontalAlignment="Left" Margin="10,340,0,28" Click="Btn_Back_Click" Width="80"/>
+                    <Button x:Name="btn_Set" Content="Set" HorizontalAlignment="Left" Margin="220,340,0,28" Click="Btn_Set_Click" Width="80"/>
                 </Grid>
             </Border>
-
-
         </StackPanel>
-
-
     </Grid>
 </Window>

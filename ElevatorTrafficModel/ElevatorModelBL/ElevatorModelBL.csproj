@@ -55,17 +55,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\QueryController.cs" />
+    <Compile Include="Additional models\DataForTable.cs" />
+    <Compile Include="Additional models\PersonName.cs" />
+    <Compile Include="Controllers\QueueController.cs" />
     <Compile Include="Enums\ElevatorsTypes.cs" />
     <Compile Include="Interfaces\IDialogService.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
-    <Compile Include="Models\DefaultDialogService.cs" />
+    <Compile Include="Services\DefaultDialogService.cs" />
     <Compile Include="Models\Elevator.cs" />
     <Compile Include="Models\Floor.cs" />
     <Compile Include="Models\PeopleGenerator.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Models\JsonFileService.cs" />
+    <Compile Include="Services\JsonFileService.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\PeopleQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,11 +78,9 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DataFiles\NamesJSON.txt">
+    <Content Include="Data files\NamesJSON.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

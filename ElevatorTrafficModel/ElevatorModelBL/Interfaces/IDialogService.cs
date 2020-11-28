@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ElevatorModelBL
+﻿namespace ElevatorModelBL.Interfaces
 {
+    /// <summary>
+    /// Interface for managing by dialog service. In the way of realizing this interface
+    /// base class should declare OpenFileDialog() and SaveFileDialog() methods.
+    /// </summary>
     public interface IDialogService
     {
         string FilePath { get; set; }

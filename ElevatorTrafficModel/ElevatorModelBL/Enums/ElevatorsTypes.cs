@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ElevatorModelBL.Enums
+﻿namespace ElevatorModelBL.Enums
 {
+    /// <summary>
+    /// Enum with three types of elevator. In the way of casting this enum to Int32 we can get a max weight.
+    /// </summary>
     public enum ElevatorType
     {
         Hydraulic = 1200,

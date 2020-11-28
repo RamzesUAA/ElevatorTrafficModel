@@ -1,33 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ElevatorModelBL.Models
+﻿namespace ElevatorModelBL.Models
 {
+    /// <summary>
+    /// Class Person describe attributes and method as person entity has.
+    /// </summary>
     public class Person
     {
-        public Person() { }
-
-        public Person(string Name, Floor FloorIntention, Floor CurrentFloor, float Weigh)
-        {
-            this.Name = Name;
-            this.FloorIntention = FloorIntention;
-            this.CurrentFloor = CurrentFloor;
-            this.Weigh = Weigh;
-        }
         public string Name { get; set; }
         public string Sex { get; set; }
         public Floor FloorIntention { get; set; }
         public Floor CurrentFloor { get; set; }
-        public float Weigh { get; set; }
-
+        public float Weight { get; set; }
+        /// <summary>
+        /// Overridden method that returns short information about passenger.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return $"Name: {this.Name}, weigh: {this.Weigh}";
+            return $"Name: {this.Name}, weigh: {this.Weight}";
         }
     }
 }

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ElevatorModelBL.Models
 {
+    /// <summary>
+    /// Class that provide all entities for entity of the real life queue.
+    /// </summary>
     public class PeopleQueue
     {
-        public PeopleQueue()
-        {
-
-        }
+        /// <summary>
+        /// Location of the queue
+        /// </summary>
         public Floor NumberOfFloor { get; set; }
+        /// <summary>
+        /// Count of the people in the certain queue.
+        /// </summary>
         public Dictionary<Elevator, List<Person>>  PeopleInQueue = new Dictionary<Elevator, List<Person>>();
-        public int CountPeopleInQueue => PeopleInQueue.Values.Count;
     }
 }
